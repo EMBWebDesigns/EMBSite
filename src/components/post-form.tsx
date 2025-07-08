@@ -53,7 +53,12 @@ export const PostForm = ({ initialData, onSubmit, isSubmitting }: PostFormProps)
   useEffect(() => {
     if (initialData) {
       form.reset({
-        ...initialData,
+        title: initialData.title,
+        slug: initialData.slug,
+        excerpt: initialData.excerpt || "",
+        content: initialData.content || "",
+        image_url: initialData.image_url || "",
+        author: initialData.author || "",
         tags: initialData.tags?.join(", ") || "",
       });
     }

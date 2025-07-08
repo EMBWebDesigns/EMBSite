@@ -25,7 +25,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     <article className="container mx-auto max-w-4xl px-4 py-16 md:px-6 md:py-24">
       <header className="mb-12 text-center">
         <div className="flex flex-wrap gap-2 justify-center mb-4">
-          {(post.tags || []).map(tag => <Badge key={tag} variant="secondary">{tag}</Badge>)}
+          {(post.tags || []).map((tag: string) => <Badge key={tag} variant="secondary">{tag}</Badge>)}
         </div>
         <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl">
           {post.title}
