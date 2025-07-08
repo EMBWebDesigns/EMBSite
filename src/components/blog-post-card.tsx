@@ -13,8 +13,8 @@ interface BlogPostCardProps {
   slug: string;
   title: string;
   excerpt: string;
-  imageUrl: string;
-  date: string;
+  image_url: string;
+  created_at: string;
   tags: string[];
 }
 
@@ -23,14 +23,14 @@ const cardVariants = {
   visible: { opacity: 1, y: 0 },
 };
 
-export const BlogPostCard = ({ slug, title, excerpt, imageUrl, date, tags }: BlogPostCardProps) => {
+export const BlogPostCard = ({ slug, title, excerpt, image_url, created_at, tags }: BlogPostCardProps) => {
   return (
     <motion.div variants={cardVariants}>
       <Card className="h-full overflow-hidden transition-shadow hover:shadow-lg flex flex-col">
         <Link href={`/blog/${slug}`}>
           <AspectRatio ratio={16 / 9}>
             <Image
-              src={imageUrl}
+              src={image_url}
               alt={title}
               fill
               className="object-cover"
@@ -46,7 +46,7 @@ export const BlogPostCard = ({ slug, title, excerpt, imageUrl, date, tags }: Blo
         </CardHeader>
         <CardContent className="flex-grow" />
         <CardFooter className="flex justify-between items-center">
-          <p className="text-sm text-muted-foreground">{date}</p>
+          <p className="text-sm text-muted-foreground">{new Date(created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
           <Button asChild variant="secondary" size="sm">
             <Link href={`/blog/${slug}`}>
               Read More
