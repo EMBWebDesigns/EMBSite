@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/components/auth-provider';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Code, Download, LayoutGrid, Library, Sparkles, FolderKanban } from "lucide-react";
+import { Code, Download, LayoutGrid, Library, Sparkles, FolderKanban, Newspaper } from "lucide-react";
 import { motion } from "framer-motion";
 import { CodeForge } from "@/components/code-forge";
 import { ComponentShowcase } from "@/components/component-showcase";
@@ -14,12 +14,14 @@ import { DesignAdvisor } from "@/components/design-advisor";
 import { ExportToolkit } from "@/components/export-toolkit";
 import { Skeleton } from '@/components/ui/skeleton';
 import { SavedSnippets } from '@/components/saved-snippets';
+import { BlogAdmin } from '@/components/blog-admin';
 
 const dashboardTabs = [
   { value: "code-forge", label: "Code Forge", icon: <Code className="mr-2 h-5 w-5" />, title: "AI Code Generation", component: <CodeForge /> },
   { value: "my-snippets", label: "My Snippets", icon: <FolderKanban className="mr-2 h-5 w-5" />, title: "Your Saved Snippets", component: <SavedSnippets /> },
   { value: "ui-builder", label: "UI Builder", icon: <LayoutGrid className="mr-2 h-5 w-5" />, title: "Visual Drag-and-Drop", component: <UiBuilder /> },
   { value: "design-advisor", label: "Design Advisor", icon: <Sparkles className="mr-2 h-5 w-5" />, title: "AI Style Guide", component: <DesignAdvisor /> },
+  { value: "blog-admin", label: "Blog Admin", icon: <Newspaper className="mr-2 h-5 w-5" />, title: "Blog Content Management", component: <BlogAdmin /> },
   { value: "export-toolkit", label: "Export Toolkit", icon: <Download className="mr-2 h-5 w-5" />, title: "Project ZIP Download", component: <ExportToolkit /> },
   { value: "component-library", label: "Component Library", icon: <Library className="mr-2 h-5 w-5" />, title: "Reusable Blocks", component: <ComponentShowcase /> },
 ];
@@ -27,12 +29,19 @@ const dashboardTabs = [
 export default function DashboardPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentTab = searchParams.get('tab') || 'code-forge';
 
   useEffect(() => {
     if (!loading && !user) {
       router.push('/login');
     }
   }, [user, loading, router]);
+
+  const handleTabChange = (value: string) => {
+    router.push(`${pathname}?tab=${value}`);
+  };
 
   if (loading || !user) {
     return (
@@ -67,8 +76,8 @@ export default function DashboardPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <Tabs defaultValue="code-forge" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-6">
+        <Tabs value={currentTab} onValueChange={handleTabChange} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 lg:grid-cols-7">
             {dashboardTabs.map((tab) => (
               <TabsTrigger key={tab.value} value={tab.value}>
                 {tab.icon}
@@ -78,8 +87,8 @@ export default function DashboardPage() {
           </TabsList>
           
           {dashboardTabs.map((tab) => (
-            <TabsContent key={tab.value} value={tab.value}>
-              <Card className="mt-6">
+            <TabsContent key={tab.value} value={tab.value} className="mt-6">
+              <Card>
                 <CardHeader>
                   <CardTitle>{tab.title}</CardTitle>
                 </CardHeader>
