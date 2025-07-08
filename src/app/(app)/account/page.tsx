@@ -24,7 +24,7 @@ import { AvatarUploader } from "@/components/avatar-uploader";
 
 const accountFormSchema = z.object({
   full_name: z.string().min(2, "Name must be at least 2 characters."),
-  avatar_url: z.string().optional(),
+  avatar_url: z.string().url().optional().or(z.literal('')),
 });
 
 type AccountFormValues = z.infer<typeof accountFormSchema>;
@@ -60,7 +60,10 @@ export default function AccountPage() {
 
     const { error } = await supabase
       .from("profiles")
-      .update({ full_name: data.full_name })
+      .update({
+        full_name: data.full_name,
+        avatar_url: data.avatar_url,
+      })
       .eq("id", user.id);
 
     setIsSubmitting(false);
