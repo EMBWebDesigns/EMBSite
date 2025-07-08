@@ -24,7 +24,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Textarea } from "./ui/textarea";
 import { Input } from "./ui/input";
@@ -68,7 +67,7 @@ export const SavedSnippets = () => {
   const { user } = useAuth();
   const [snippets, setSnippets] = useState<Snippet[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingSnippet, setEditingSnippet] = useState<Snippet | null>(null);
 
   useEffect(() => {
     const fetchSnippets = async () => {
@@ -155,61 +154,68 @@ export const SavedSnippets = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {snippets.map((snippet) => (
-        <Card key={snippet.id} className="flex flex-col">
-          <CardHeader>
-            <CardTitle className="text-lg line-clamp-2">{snippet.prompt || "Untitled Snippet"}</CardTitle>
-            <CardDescription>
-              Saved on {new Date(snippet.created_at).toLocaleDateString()}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex-grow" />
-          <CardFooter className="flex justify-between">
-            <div className="flex gap-2">
-              <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button variant="secondary">
-                    <Edit className="mr-2 h-4 w-4" />
-                    Edit
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-4xl">
-                  <DialogHeader>
-                    <DialogTitle>Edit Snippet</DialogTitle>
-                  </DialogHeader>
-                  <EditSnippetForm snippet={snippet} onSave={handleUpdate} closeDialog={() => setIsEditDialogOpen(false)} />
-                </DialogContent>
-              </Dialog>
-              <Button variant="outline" size="icon" onClick={() => handleCopy(snippet.code)}>
-                <Copy className="h-4 w-4" />
-              </Button>
-            </div>
-            
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Trash2 className="h-4 w-4 text-destructive" />
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {snippets.map((snippet) => (
+          <Card key={snippet.id} className="flex flex-col">
+            <CardHeader>
+              <CardTitle className="text-lg line-clamp-2">{snippet.prompt || "Untitled Snippet"}</CardTitle>
+              <CardDescription>
+                Saved on {new Date(snippet.created_at).toLocaleDateString()}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex-grow" />
+            <CardFooter className="flex justify-between">
+              <div className="flex gap-2">
+                <Button variant="secondary" onClick={() => setEditingSnippet(snippet)}>
+                  <Edit className="mr-2 h-4 w-4" />
+                  Edit
                 </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete your saved snippet.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={() => handleDelete(snippet.id)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                    Delete
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </CardFooter>
-        </Card>
-      ))}
-    </div>
+                <Button variant="outline" size="icon" onClick={() => handleCopy(snippet.code)}>
+                  <Copy className="h-4 w-4" />
+                </Button>
+              </div>
+              
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <Trash2 className="h-4 w-4 text-destructive" />
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete your saved snippet.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => handleDelete(snippet.id)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                      Delete
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
+
+      <Dialog open={!!editingSnippet} onOpenChange={(isOpen) => !isOpen && setEditingSnippet(null)}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>Edit Snippet</DialogTitle>
+          </DialogHeader>
+          {editingSnippet && (
+            <EditSnippetForm 
+              snippet={editingSnippet} 
+              onSave={handleUpdate} 
+              closeDialog={() => setEditingSnippet(null)} 
+            />
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
