@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "./ui/button";
 import { Skeleton } from "./ui/skeleton";
 import { toast } from "sonner";
-import { Copy, Trash2 } from "lucide-react";
+import { Copy, Eye, Trash2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,6 +19,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 type Snippet = {
   id: string;
@@ -83,6 +92,7 @@ export const SavedSnippets = () => {
             </CardHeader>
             <CardFooter>
               <Skeleton className="h-10 w-24" />
+              <Skeleton className="h-10 w-10" />
             </CardFooter>
           </Card>
         ))}
@@ -113,10 +123,44 @@ export const SavedSnippets = () => {
           </CardHeader>
           <CardContent className="flex-grow" />
           <CardFooter className="flex justify-between">
-            <Button variant="secondary" onClick={() => handleCopy(snippet.code)}>
-              <Copy className="mr-2 h-4 w-4" />
-              Copy Code
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="secondary">
+                  <Eye className="mr-2 h-4 w-4" />
+                  View
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-4xl">
+                <DialogHeader>
+                  <DialogTitle>{snippet.prompt}</DialogTitle>
+                </DialogHeader>
+                <div className="relative mt-4">
+                  <Button
+                    size="sm"
+                    onClick={() => handleCopy(snippet.code)}
+                    className="absolute top-4 right-4 z-10"
+                  >
+                    <Copy className="mr-2 h-4 w-4" />
+                    Copy
+                  </Button>
+                  <div className="rounded-lg bg-[#282c34] overflow-hidden max-h-[60vh] overflow-y-auto">
+                    <SyntaxHighlighter
+                      language="jsx"
+                      style={atomDark}
+                      customStyle={{
+                        margin: 0,
+                        padding: "1.5rem",
+                        backgroundColor: "transparent",
+                      }}
+                      wrapLongLines
+                    >
+                      {snippet.code}
+                    </SyntaxHighlighter>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+            
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button variant="ghost" size="icon">
