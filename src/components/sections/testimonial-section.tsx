@@ -83,7 +83,7 @@ export const TestimonialSection = () => {
         >
           <CarouselContent>
             {testimonials.map((testimonial, index) => (
-              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+              <CarouselItem key={index} className="basis-full md:basis-1/2">
                 <div className="p-1 h-full">
                   <TestimonialCard
                     quote={testimonial.quote}
@@ -96,8 +96,8 @@ export const TestimonialSection = () => {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="hidden sm:flex" />
-          <CarouselNext className="hidden sm:flex" />
+          <CarouselPrevious className="flex" />
+          <CarouselNext className="flex" />
         </Carousel>
       </div>
     </section>
