@@ -13,7 +13,6 @@ import { useAuth } from './auth-provider';
 
 const navLinks = [
   { href: '/features', label: 'Features' },
-  { href: '/dashboard', label: 'Demo' },
   { href: '/pricing', label: 'Pricing' },
   { href: '/docs', label: 'Documentation' },
   { href: '/contact', label: 'Contact' },
@@ -26,27 +25,24 @@ export const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
-        <div className="mr-6 flex items-center">
+      <div className="container relative flex h-16 max-w-screen-2xl items-center">
+        <div className="flex items-center">
           <Logo />
         </div>
         
-        <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-          {navLinks.map((link) => {
-            if (link.href === '/dashboard' && !user) return null;
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "transition-colors hover:text-primary",
-                  pathname === link.href ? "text-primary" : "text-foreground/60"
-                )}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
+        <nav className="hidden md:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 items-center space-x-6 text-sm font-medium">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={cn(
+                "transition-colors hover:text-primary",
+                pathname === link.href ? "text-primary" : "text-foreground/60"
+              )}
+            >
+              {link.label}
+            </Link>
+          ))}
         </nav>
 
         <div className="flex flex-1 items-center justify-end space-x-2">
@@ -68,22 +64,19 @@ export const Header = () => {
                     <Logo />
                   </div>
                   <div className="flex flex-col space-y-4">
-                    {navLinks.map((link) => {
-                      if (link.href === '/dashboard' && !user) return null;
-                      return (
-                        <Link
-                          key={link.href}
-                          href={link.href}
-                          onClick={() => setIsMenuOpen(false)}
-                          className={cn(
-                            "text-lg font-medium transition-colors hover:text-primary",
-                            pathname === link.href && "text-primary"
-                          )}
-                        >
-                          {link.label}
-                        </Link>
-                      );
-                    })}
+                    {navLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        onClick={() => setIsMenuOpen(false)}
+                        className={cn(
+                          "text-lg font-medium transition-colors hover:text-primary",
+                          pathname === link.href && "text-primary"
+                        )}
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
                     <div className="mt-4 border-t pt-4">
                       <UserNav />
                     </div>
