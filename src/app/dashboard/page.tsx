@@ -6,6 +6,7 @@ import { Code, Download, LayoutGrid, Library, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { CodeForge } from "@/components/code-forge";
 import { ComponentShowcase } from "@/components/component-showcase";
+import { UiBuilder } from "@/components/ui-builder";
 
 const dashboardTabs = [
   {
@@ -97,6 +98,17 @@ export default function DashboardPage() {
             </Card>
           </TabsContent>
 
+          <TabsContent value="ui-builder">
+            <Card className="mt-6">
+              <CardHeader>
+                <CardTitle>{dashboardTabs.find(t => t.value === 'ui-builder')?.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <UiBuilder />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           <TabsContent value="component-library">
             <Card className="mt-6">
               <CardHeader>
@@ -108,7 +120,7 @@ export default function DashboardPage() {
             </Card>
           </TabsContent>
 
-          {dashboardTabs.filter(t => !['code-forge', 'component-library'].includes(t.value)).map((tab) => (
+          {dashboardTabs.filter(t => !['code-forge', 'ui-builder', 'component-library'].includes(t.value)).map((tab) => (
             <TabsContent key={tab.value} value={tab.value}>
               <Card className="mt-6">
                 <CardHeader>
