@@ -17,7 +17,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { Mail, Building, User } from "lucide-react";
+import { Mail, Building, User, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -33,6 +35,7 @@ const formSchema = z.object({
 });
 
 export default function ContactPage() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -43,12 +46,28 @@ export default function ContactPage() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    toast.success("Message Sent!", {
-      description: "Thanks for reaching out. We'll get back to you shortly.",
-    });
-    form.reset();
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsSubmitting(true);
+    const { error } = await supabase.from('contacts').insert([
+      {
+        name: values.name,
+        email: values.email,
+        company: values.company,
+        message: values.message,
+      }
+    ]);
+    setIsSubmitting(false);
+
+    if (error) {
+      toast.error("Submission Failed", {
+        description: "Something went wrong. Please try again.",
+      });
+    } else {
+      toast.success("Message Sent!", {
+        description: "Thanks for reaching out. We'll get back to you shortly.",
+      });
+      form.reset();
+    }
   }
 
   return (
@@ -146,7 +165,10 @@ export default function ContactPage() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full">Submit</Button>
+                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                  {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Submit
+                </Button>
               </form>
             </Form>
           </CardContent>
