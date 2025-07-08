@@ -2,10 +2,12 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Logo } from './logo';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import { Menu, Code } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const navLinks = [
   { href: '/features', label: 'Features' },
@@ -17,6 +19,7 @@ const navLinks = [
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -30,7 +33,10 @@ export const Header = () => {
             <Link
               key={link.href}
               href={link.href}
-              className="transition-colors hover:text-primary"
+              className={cn(
+                "transition-colors hover:text-primary",
+                pathname === link.href ? "text-primary" : "text-foreground/60"
+              )}
             >
               {link.label}
             </Link>
@@ -66,7 +72,10 @@ export const Header = () => {
                         key={link.href}
                         href={link.href}
                         onClick={() => setIsMenuOpen(false)}
-                        className="text-lg font-medium transition-colors hover:text-primary"
+                        className={cn(
+                          "text-lg font-medium transition-colors hover:text-primary",
+                          pathname === link.href && "text-primary"
+                        )}
                       >
                         {link.label}
                       </Link>
