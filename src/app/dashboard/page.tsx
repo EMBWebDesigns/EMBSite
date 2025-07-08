@@ -1,5 +1,8 @@
 "use client";
 
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/components/auth-provider';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Code, Download, LayoutGrid, Library, Sparkles } from "lucide-react";
@@ -9,46 +12,38 @@ import { ComponentShowcase } from "@/components/component-showcase";
 import { UiBuilder } from "@/components/ui-builder";
 import { DesignAdvisor } from "@/components/design-advisor";
 import { ExportToolkit } from "@/components/export-toolkit";
+import { Skeleton } from '@/components/ui/skeleton';
 
 const dashboardTabs = [
-  {
-    value: "code-forge",
-    label: "Code Forge",
-    icon: <Code className="mr-2 h-5 w-5" />,
-    title: "Simulated Prompt-to-Code",
-    component: <CodeForge />,
-  },
-  {
-    value: "ui-builder",
-    label: "UI Builder",
-    icon: <LayoutGrid className="mr-2 h-5 w-5" />,
-    title: "Visual Drag-and-Drop",
-    component: <UiBuilder />,
-  },
-  {
-    value: "design-advisor",
-    label: "Design Advisor",
-    icon: <Sparkles className="mr-2 h-5 w-5" />,
-    title: "AI Style Guide",
-    component: <DesignAdvisor />,
-  },
-  {
-    value: "export-toolkit",
-    label: "Export Toolkit",
-    icon: <Download className="mr-2 h-5 w-5" />,
-    title: "Project ZIP Download",
-    component: <ExportToolkit />,
-  },
-  {
-    value: "component-library",
-    label: "Component Library",
-    icon: <Library className="mr-2 h-5 w-5" />,
-    title: "Reusable Blocks",
-    component: <ComponentShowcase />,
-  },
+  { value: "code-forge", label: "Code Forge", icon: <Code className="mr-2 h-5 w-5" />, title: "Simulated Prompt-to-Code", component: <CodeForge /> },
+  { value: "ui-builder", label: "UI Builder", icon: <LayoutGrid className="mr-2 h-5 w-5" />, title: "Visual Drag-and-Drop", component: <UiBuilder /> },
+  { value: "design-advisor", label: "Design Advisor", icon: <Sparkles className="mr-2 h-5 w-5" />, title: "AI Style Guide", component: <DesignAdvisor /> },
+  { value: "export-toolkit", label: "Export Toolkit", icon: <Download className="mr-2 h-5 w-5" />, title: "Project ZIP Download", component: <ExportToolkit /> },
+  { value: "component-library", label: "Component Library", icon: <Library className="mr-2 h-5 w-5" />, title: "Reusable Blocks", component: <ComponentShowcase /> },
 ];
 
 export default function DashboardPage() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
+
+  if (loading || !user) {
+    return (
+      <div className="container mx-auto max-w-screen-xl px-4 py-16 md:px-6 md:py-24">
+        <div className="text-center mb-12">
+          <Skeleton className="h-12 w-3/4 mx-auto" />
+          <Skeleton className="h-6 w-1/2 mx-auto mt-4" />
+        </div>
+        <Skeleton className="h-[600px] w-full" />
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto max-w-screen-xl px-4 py-16 md:px-6 md:py-24">
       <motion.div
@@ -61,7 +56,7 @@ export default function DashboardPage() {
           Interactive Demo Experience
         </h1>
         <p className="mt-4 max-w-[700px] mx-auto text-muted-foreground md:text-xl">
-          Get a feel for the power of emb.web. The following tabs showcase a simulation of our core features.
+          Welcome, {user.email}. Get a feel for the power of emb.web.
         </p>
       </motion.div>
 

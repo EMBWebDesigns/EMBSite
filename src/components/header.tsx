@@ -6,8 +6,10 @@ import { usePathname } from 'next/navigation';
 import { Logo } from './logo';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
-import { Menu, Code } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { UserNav } from './user-nav';
+import { useAuth } from './auth-provider';
 
 const navLinks = [
   { href: '/features', label: 'Features' },
@@ -20,6 +22,7 @@ const navLinks = [
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { user } = useAuth();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -29,29 +32,27 @@ export const Header = () => {
         </div>
         
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                "transition-colors hover:text-primary",
-                pathname === link.href ? "text-primary" : "text-foreground/60"
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            if (link.href === '/dashboard' && !user) return null;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  "transition-colors hover:text-primary",
+                  pathname === link.href ? "text-primary" : "text-foreground/60"
+                )}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="flex flex-1 items-center justify-end space-x-2">
-          <nav className="hidden md:flex items-center space-x-2">
-            <Button asChild>
-              <Link href="/dashboard">
-                <Code className="mr-2 h-4 w-4" />
-                Try Code Builder
-              </Link>
-            </Button>
-          </nav>
+          <div className="hidden md:flex">
+            <UserNav />
+          </div>
 
           <div className="md:hidden">
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
@@ -67,25 +68,25 @@ export const Header = () => {
                     <Logo />
                   </div>
                   <div className="flex flex-col space-y-4">
-                    {navLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        onClick={() => setIsMenuOpen(false)}
-                        className={cn(
-                          "text-lg font-medium transition-colors hover:text-primary",
-                          pathname === link.href && "text-primary"
-                        )}
-                      >
-                        {link.label}
-                      </Link>
-                    ))}
-                    <Button asChild className="mt-4">
-                      <Link href="/dashboard" onClick={() => setIsMenuOpen(false)}>
-                        <Code className="mr-2 h-4 w-4" />
-                        Try Code Builder
-                      </Link>
-                    </Button>
+                    {navLinks.map((link) => {
+                      if (link.href === '/dashboard' && !user) return null;
+                      return (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          onClick={() => setIsMenuOpen(false)}
+                          className={cn(
+                            "text-lg font-medium transition-colors hover:text-primary",
+                            pathname === link.href && "text-primary"
+                          )}
+                        >
+                          {link.label}
+                        </Link>
+                      );
+                    })}
+                    <div className="mt-4 border-t pt-4">
+                      <UserNav />
+                    </div>
                   </div>
                 </div>
               </SheetContent>
