@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Code, Download, LayoutGrid, Library, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
+import { CodeForge } from "@/components/code-forge";
 
 const dashboardTabs = [
   {
@@ -74,7 +75,19 @@ export default function DashboardPage() {
               </TabsTrigger>
             ))}
           </TabsList>
-          {dashboardTabs.map((tab) => (
+          
+          <TabsContent value="code-forge">
+            <Card className="mt-6">
+              <CardHeader>
+                <CardTitle>{dashboardTabs[0].title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CodeForge />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {dashboardTabs.slice(1).map((tab) => (
             <TabsContent key={tab.value} value={tab.value}>
               <Card className="mt-6">
                 <CardHeader>
