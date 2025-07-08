@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { MadeWithDyad } from "@/components/made-with-dyad";
 import { FeatureCard } from "@/components/feature-card";
 import { TestimonialCard } from "@/components/testimonial-card";
+import { FeaturedTemplatesSection } from "@/components/sections/featured-templates-section";
 
 const homeFeatures = [
   {
@@ -242,6 +243,8 @@ export default function Home() {
             </motion.div>
           </div>
         </section>
+
+        <FeaturedTemplatesSection />
 
         <section className="w-full py-24 md:py-32 border-t">
           <div className="container mx-auto max-w-screen-xl px-4 md:px-6">
