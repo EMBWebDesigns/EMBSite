@@ -6,7 +6,6 @@ import { Logo } from './logo';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import { Menu, Code } from 'lucide-react';
-import { ThemeToggle } from './theme-toggle';
 
 const navLinks = [
   { href: '/features', label: 'Features' },
@@ -47,8 +46,6 @@ export const Header = () => {
               </Link>
             </Button>
           </nav>
-
-          <ThemeToggle />
 
           <div className="md:hidden">
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>

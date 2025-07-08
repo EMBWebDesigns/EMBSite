@@ -1,6 +1,9 @@
+"use client";
+
 import React from 'react';
 import { Logo } from './logo';
 import Link from 'next/link';
+import { ThemeToggle } from './theme-toggle';
 
 export const Footer = () => {
   return (
@@ -39,8 +42,11 @@ export const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} embwebdesigns.com. All rights reserved.</p>
+        <div className="mt-8 border-t pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-muted-foreground">
+            &copy; {new Date().getFullYear()} embwebdesigns.com. All rights reserved.
+          </p>
+          <ThemeToggle />
         </div>
       </div>
     </footer>
