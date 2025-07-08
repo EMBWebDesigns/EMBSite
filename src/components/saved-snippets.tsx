@@ -28,16 +28,18 @@ import {
 import { Textarea } from "./ui/textarea";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 type Snippet = {
   id: string;
-  prompt: string;
+  prompt: string | null;
   code: string;
   created_at: string;
 };
 
 const EditSnippetForm = ({ snippet, onSave, closeDialog }: { snippet: Snippet, onSave: (id: string, prompt: string, code: string) => void, closeDialog: () => void }) => {
-  const [prompt, setPrompt] = useState(snippet.prompt);
+  const [prompt, setPrompt] = useState(snippet.prompt || "");
   const [code, setCode] = useState(snippet.code);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -54,7 +56,7 @@ const EditSnippetForm = ({ snippet, onSave, closeDialog }: { snippet: Snippet, o
       </div>
       <div>
         <Label htmlFor="code">Code</Label>
-        <Textarea id="code" value={code} onChange={(e) => setCode(e.target.value)} className="min-h-[300px] font-mono" />
+        <Textarea id="code" value={code} onChange={(e) => setCode(e.target.value)} className="min-h-[400px] font-mono" />
       </div>
       <div className="flex justify-end">
         <Button type="submit">Save Changes</Button>
@@ -82,7 +84,7 @@ export const SavedSnippets = () => {
       if (error) {
         toast.error("Failed to fetch snippets.", { description: error.message });
       } else {
-        setSnippets(data);
+        setSnippets(data as Snippet[]);
       }
       setLoading(false);
     };
@@ -132,6 +134,9 @@ export const SavedSnippets = () => {
               <Skeleton className="h-5 w-3/4" />
               <Skeleton className="h-4 w-1/2" />
             </CardHeader>
+            <CardContent>
+                <Skeleton className="h-32 w-full" />
+            </CardContent>
             <CardFooter>
               <Skeleton className="h-10 w-24" />
               <Skeleton className="h-10 w-10" />
@@ -164,7 +169,22 @@ export const SavedSnippets = () => {
                 Saved on {new Date(snippet.created_at).toLocaleDateString()}
               </CardDescription>
             </CardHeader>
-            <CardContent className="flex-grow" />
+            <CardContent className="flex-grow pt-0">
+              <div className="rounded-md bg-[#282c34] overflow-hidden text-sm max-h-48 overflow-y-auto">
+                <SyntaxHighlighter
+                  language="jsx"
+                  style={atomDark}
+                  customStyle={{
+                    margin: 0,
+                    padding: "1rem",
+                    backgroundColor: "transparent",
+                  }}
+                  wrapLongLines
+                >
+                  {snippet.code}
+                </SyntaxHighlighter>
+              </div>
+            </CardContent>
             <CardFooter className="flex justify-between">
               <div className="flex gap-2">
                 <Button variant="secondary" onClick={() => setEditingSnippet(snippet)}>
