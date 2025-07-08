@@ -9,6 +9,7 @@ import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import { Menu } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { UserNav } from './user-nav';
+import { useAuth } from './auth-provider';
 
 const navLinks = [
   { href: '/features', label: 'Features' },
@@ -21,6 +22,7 @@ const navLinks = [
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { user } = useAuth();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -45,7 +47,12 @@ export const Header = () => {
         </nav>
 
         <div className="flex flex-1 items-center justify-end space-x-2">
-          <div className="hidden md:flex">
+          <div className="hidden md:flex items-center space-x-2">
+            {user && (
+              <Button asChild variant="ghost">
+                <Link href="/dashboard">Dashboard</Link>
+              </Button>
+            )}
             <UserNav />
           </div>
 
@@ -77,7 +84,21 @@ export const Header = () => {
                       </Link>
                     ))}
                     <div className="mt-4 border-t pt-4">
-                      <UserNav />
+                      <div className="flex flex-col space-y-4 items-start">
+                        {user && (
+                          <Link
+                            href="/dashboard"
+                            onClick={() => setIsMenuOpen(false)}
+                            className={cn(
+                              "text-lg font-medium transition-colors hover:text-primary",
+                              pathname.startsWith('/dashboard') && "text-primary"
+                            )}
+                          >
+                            Dashboard
+                          </Link>
+                        )}
+                        <UserNav />
+                      </div>
                     </div>
                   </div>
                 </div>
