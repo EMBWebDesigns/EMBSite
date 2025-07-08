@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "./ui/button";
 import { Skeleton } from "./ui/skeleton";
 import { toast } from "sonner";
-import { Copy, Eye, Trash2 } from "lucide-react";
+import { Copy, Edit, Trash2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,8 +26,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { Textarea } from "./ui/textarea";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 
 type Snippet = {
   id: string;
@@ -36,10 +37,38 @@ type Snippet = {
   created_at: string;
 };
 
+const EditSnippetForm = ({ snippet, onSave, closeDialog }: { snippet: Snippet, onSave: (id: string, prompt: string, code: string) => void, closeDialog: () => void }) => {
+  const [prompt, setPrompt] = useState(snippet.prompt);
+  const [code, setCode] = useState(snippet.code);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSave(snippet.id, prompt, code);
+    closeDialog();
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <Label htmlFor="prompt">Prompt</Label>
+        <Input id="prompt" value={prompt} onChange={(e) => setPrompt(e.target.value)} />
+      </div>
+      <div>
+        <Label htmlFor="code">Code</Label>
+        <Textarea id="code" value={code} onChange={(e) => setCode(e.target.value)} className="min-h-[300px] font-mono" />
+      </div>
+      <div className="flex justify-end">
+        <Button type="submit">Save Changes</Button>
+      </div>
+    </form>
+  );
+};
+
 export const SavedSnippets = () => {
   const { user } = useAuth();
   const [snippets, setSnippets] = useState<Snippet[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   useEffect(() => {
     const fetchSnippets = async () => {
@@ -65,6 +94,20 @@ export const SavedSnippets = () => {
   const handleCopy = (code: string) => {
     navigator.clipboard.writeText(code);
     toast.success("Code copied to clipboard!");
+  };
+
+  const handleUpdate = async (id: string, prompt: string, code: string) => {
+    const { error } = await supabase
+      .from("code_snippets")
+      .update({ prompt, code })
+      .eq("id", id);
+
+    if (error) {
+      toast.error("Failed to update snippet.", { description: error.message });
+    } else {
+      setSnippets(snippets.map(s => s.id === id ? { ...s, prompt, code } : s));
+      toast.success("Snippet updated successfully!");
+    }
   };
 
   const handleDelete = async (snippetId: string) => {
@@ -123,43 +166,25 @@ export const SavedSnippets = () => {
           </CardHeader>
           <CardContent className="flex-grow" />
           <CardFooter className="flex justify-between">
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant="secondary">
-                  <Eye className="mr-2 h-4 w-4" />
-                  View
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-4xl">
-                <DialogHeader>
-                  <DialogTitle>{snippet.prompt}</DialogTitle>
-                </DialogHeader>
-                <div className="relative mt-4">
-                  <Button
-                    size="sm"
-                    onClick={() => handleCopy(snippet.code)}
-                    className="absolute top-4 right-4 z-10"
-                  >
-                    <Copy className="mr-2 h-4 w-4" />
-                    Copy
+            <div className="flex gap-2">
+              <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="secondary">
+                    <Edit className="mr-2 h-4 w-4" />
+                    Edit
                   </Button>
-                  <div className="rounded-lg bg-[#282c34] overflow-hidden max-h-[60vh] overflow-y-auto">
-                    <SyntaxHighlighter
-                      language="jsx"
-                      style={atomDark}
-                      customStyle={{
-                        margin: 0,
-                        padding: "1.5rem",
-                        backgroundColor: "transparent",
-                      }}
-                      wrapLongLines
-                    >
-                      {snippet.code}
-                    </SyntaxHighlighter>
-                  </div>
-                </div>
-              </DialogContent>
-            </Dialog>
+                </DialogTrigger>
+                <DialogContent className="max-w-4xl">
+                  <DialogHeader>
+                    <DialogTitle>Edit Snippet</DialogTitle>
+                  </DialogHeader>
+                  <EditSnippetForm snippet={snippet} onSave={handleUpdate} closeDialog={() => setIsEditDialogOpen(false)} />
+                </DialogContent>
+              </Dialog>
+              <Button variant="outline" size="icon" onClick={() => handleCopy(snippet.code)}>
+                <Copy className="h-4 w-4" />
+              </Button>
+            </div>
             
             <AlertDialog>
               <AlertDialogTrigger asChild>
