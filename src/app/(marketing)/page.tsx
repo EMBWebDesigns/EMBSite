@@ -6,8 +6,8 @@ import { ArrowRight, Code, Layers, LayoutGrid, Sparkles, PencilLine, Bot, Downlo
 import { motion } from "framer-motion";
 import { MadeWithDyad } from "@/components/made-with-dyad";
 import { FeatureCard } from "@/components/feature-card";
-import { TestimonialCard } from "@/components/testimonial-card";
 import { FeaturedTemplatesSection } from "@/components/sections/featured-templates-section";
+import { TestimonialSection } from "@/components/sections/testimonial-section";
 
 const homeFeatures = [
   {
@@ -42,30 +42,6 @@ const howItWorksSteps = [
     icon: <DownloadCloud />,
     title: "3. Export & Integrate",
     description: "Happy with the result? Export the code snippet or the entire project and integrate it seamlessly into your workflow.",
-  },
-];
-
-const testimonials = [
-  {
-    quote: "This tool has supercharged my workflow. I can prototype ideas in minutes instead of hours. It's an absolute game-changer.",
-    name: "Sarah Dayan",
-    title: "Frontend Developer @ TechCorp",
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-    initials: "SD",
-  },
-  {
-    quote: "As a designer who codes, emb.web is the perfect bridge. I can bring my visual ideas to life without getting stuck on boilerplate code.",
-    name: "Carlos Rodriguez",
-    title: "UI/UX Designer",
-    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-    initials: "CR",
-  },
-  {
-    quote: "The quality of the generated code is surprisingly high. It's clean, follows best practices, and is easy to customize.",
-    name: "Mei Lin",
-    title: "Full-Stack Engineer",
-    avatar: "https://randomuser.me/api/portraits/women/68.jpg",
-    initials: "ML",
   },
 ];
 
@@ -206,43 +182,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="w-full py-24 md:py-32 border-t">
-          <div className="container mx-auto max-w-screen-xl px-4 md:px-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.5 }}
-              className="flex flex-col items-center space-y-4 text-center mb-12"
-            >
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                Loved by Developers Worldwide
-              </h2>
-              <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                Don't just take our word for it. Here's what our users are saying.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ staggerChildren: 0.2 }}
-              className="mx-auto grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
-            >
-              {testimonials.map((testimonial, index) => (
-                <TestimonialCard
-                  key={index}
-                  quote={testimonial.quote}
-                  name={testimonial.name}
-                  title={testimonial.title}
-                  avatar={testimonial.avatar}
-                  initials={testimonial.initials}
-                />
-              ))}
-            </motion.div>
-          </div>
-        </section>
+        <TestimonialSection />
 
         <FeaturedTemplatesSection />
 
