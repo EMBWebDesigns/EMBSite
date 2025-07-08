@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Code, Download, LayoutGrid, Library, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { CodeForge } from "@/components/code-forge";
+import { ComponentShowcase } from "@/components/component-showcase";
 
 const dashboardTabs = [
   {
@@ -40,9 +41,18 @@ const dashboardTabs = [
     label: "Component Library",
     icon: <Library className="mr-2 h-5 w-5" />,
     title: "Reusable Blocks",
-    description: "Browse a showcase of available components and blocks to use in your projects. (This is a simulated experience)",
+    description: "Browse a showcase of available components and blocks to use in your projects.",
   },
 ];
+
+const PlaceholderContent = ({ description, label }: { description: string, label: string }) => (
+    <div className="space-y-2">
+        <p className="text-muted-foreground">{description}</p>
+        <div className="border rounded-lg p-16 bg-background/50 flex items-center justify-center">
+            <p className="text-sm text-muted-foreground">[Interactive Content for {label} coming soon]</p>
+        </div>
+    </div>
+);
 
 export default function DashboardPage() {
   return (
@@ -79,7 +89,7 @@ export default function DashboardPage() {
           <TabsContent value="code-forge">
             <Card className="mt-6">
               <CardHeader>
-                <CardTitle>{dashboardTabs[0].title}</CardTitle>
+                <CardTitle>{dashboardTabs.find(t => t.value === 'code-forge')?.title}</CardTitle>
               </CardHeader>
               <CardContent>
                 <CodeForge />
@@ -87,17 +97,25 @@ export default function DashboardPage() {
             </Card>
           </TabsContent>
 
-          {dashboardTabs.slice(1).map((tab) => (
+          <TabsContent value="component-library">
+            <Card className="mt-6">
+              <CardHeader>
+                <CardTitle>{dashboardTabs.find(t => t.value === 'component-library')?.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ComponentShowcase />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {dashboardTabs.filter(t => !['code-forge', 'component-library'].includes(t.value)).map((tab) => (
             <TabsContent key={tab.value} value={tab.value}>
               <Card className="mt-6">
                 <CardHeader>
                   <CardTitle>{tab.title}</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-2">
-                  <p className="text-muted-foreground">{tab.description}</p>
-                  <div className="border rounded-lg p-16 bg-background/50 flex items-center justify-center">
-                    <p className="text-sm text-muted-foreground">[Interactive Content for {tab.label} coming soon]</p>
-                  </div>
+                <CardContent>
+                    <PlaceholderContent description={tab.description} label={tab.label} />
                 </CardContent>
               </Card>
             </TabsContent>
