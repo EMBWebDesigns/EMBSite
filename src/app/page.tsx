@@ -2,9 +2,28 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Code, Layers } from "lucide-react";
+import { ArrowRight, Code, Layers, LayoutGrid, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { MadeWithDyad } from "@/components/made-with-dyad";
+import { FeatureCard } from "@/components/feature-card";
+
+const homeFeatures = [
+  {
+    icon: <Code />,
+    title: "Smart Code Generator",
+    description: "Turn ideas into code instantly with AI-powered snippet generation.",
+  },
+  {
+    icon: <LayoutGrid />,
+    title: "UI Block Builder",
+    description: "Visually assemble your UI with a library of pre-built components.",
+  },
+  {
+    icon: <Sparkles />,
+    title: "Layout Suggestion Engine",
+    description: "Get AI-powered recommendations for optimized layouts and designs.",
+  },
+];
 
 export default function Home() {
   return (
@@ -53,6 +72,57 @@ export default function Home() {
                 </Button>
               </motion.div>
             </div>
+          </div>
+        </section>
+
+        <section className="w-full py-24 md:py-32 border-t">
+          <div className="container mx-auto max-w-screen-xl px-4 md:px-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.5 }}
+              className="flex flex-col items-center space-y-4 text-center mb-12"
+            >
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+                Powerful Features to Build Faster
+              </h2>
+              <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                From code generation to layout suggestions, our AI has you covered. We provide a suite of tools designed to accelerate your workflow and enhance your creativity.
+              </p>
+            </motion.div>
+            
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ staggerChildren: 0.2 }}
+              className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-2 md:grid-cols-3 lg:gap-12"
+            >
+              {homeFeatures.map((feature, index) => (
+                <FeatureCard
+                  key={index}
+                  icon={feature.icon}
+                  title={feature.title}
+                  description={feature.description}
+                />
+              ))}
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.8 }}
+              transition={{ duration: 0.5 }}
+              className="mt-12 text-center"
+            >
+              <Button asChild size="lg">
+                <Link href="/features">
+                  Explore All Features
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
+            </motion.div>
           </div>
         </section>
       </main>
