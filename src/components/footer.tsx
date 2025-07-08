@@ -22,13 +22,14 @@ export const Footer = () => {
               <p className="font-medium text-foreground">Platform</p>
               <ul className="mt-4 space-y-2 text-sm">
                 <li><Link href="/features" className="text-muted-foreground hover:text-primary">Features</Link></li>
-                <li><Link href="/dashboard" className="text-muted-foreground hover:text-primary">Demo</Link></li>
+                <li><Link href="/dashboard" className="text-muted-foreground hover:text-primary">Dashboard</Link></li>
                 <li><Link href="/pricing" className="text-muted-foreground hover:text-primary">Pricing</Link></li>
               </ul>
             </div>
             <div>
               <p className="font-medium text-foreground">Resources</p>
               <ul className="mt-4 space-y-2 text-sm">
+                <li><Link href="/blog" className="text-muted-foreground hover:text-primary">Blog</Link></li>
                 <li><Link href="/docs" className="text-muted-foreground hover:text-primary">Documentation</Link></li>
                 <li><Link href="/contact" className="text-muted-foreground hover:text-primary">Contact Us</Link></li>
               </ul>
@@ -51,4 +52,3 @@ export const Footer = () => {
       </div>
     </footer>
   );
-};

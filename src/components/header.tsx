@@ -9,11 +9,11 @@ import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import { Menu } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { UserNav } from './user-nav';
-import { useAuth } from './auth-provider';
 
 const navLinks = [
   { href: '/features', label: 'Features' },
   { href: '/pricing', label: 'Pricing' },
+  { href: '/blog', label: 'Blog' },
   { href: '/docs', label: 'Documentation' },
   { href: '/contact', label: 'Contact' },
 ];
@@ -21,7 +21,6 @@ const navLinks = [
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
-  const { user } = useAuth();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -37,7 +36,7 @@ export const Header = () => {
               href={link.href}
               className={cn(
                 "transition-colors hover:text-primary",
-                pathname === link.href ? "text-primary" : "text-foreground/60"
+                pathname.startsWith(link.href) ? "text-primary" : "text-foreground/60"
               )}
             >
               {link.label}
@@ -71,7 +70,7 @@ export const Header = () => {
                         onClick={() => setIsMenuOpen(false)}
                         className={cn(
                           "text-lg font-medium transition-colors hover:text-primary",
-                          pathname === link.href && "text-primary"
+                          pathname.startsWith(link.href) && "text-primary"
                         )}
                       >
                         {link.label}
@@ -89,4 +88,3 @@ export const Header = () => {
       </div>
     </header>
   );
-};
