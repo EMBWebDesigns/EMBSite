@@ -9,6 +9,7 @@ import { Check, X } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 const pricingTiers = [
   {
@@ -48,6 +49,24 @@ const featureMatrix = [
     { feature: "Priority Support", free: false, developer: false, studio: true },
 ];
 
+const faqs = [
+    {
+        question: "Is there a free trial for paid plans?",
+        answer: "Yes, we offer a 14-day free trial for our Developer plan. You can explore all the advanced features with no commitment. No credit card is required to start your trial."
+    },
+    {
+        question: "Can I change my plan later?",
+        answer: "Absolutely! You can upgrade, downgrade, or cancel your plan at any time from your account settings. Changes will be prorated and applied to your next billing cycle."
+    },
+    {
+        question: "What payment methods do you accept?",
+        answer: "We accept all major credit cards, including Visa, Mastercard, and American Express. For our Studio plan, we also support invoicing and bank transfers."
+    },
+    {
+        question: "What happens if I exceed my project limit on the Developer plan?",
+        answer: "If you reach the 10-project limit on the Developer plan, you will be prompted to upgrade to the Studio plan to create more projects. You can also delete old projects to free up space."
+    }
+];
 
 export default function PricingPage() {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
@@ -170,6 +189,27 @@ export default function PricingPage() {
                 </TableBody>
             </Table>
         </Card>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.6 }}
+        className="mt-24 max-w-3xl mx-auto"
+      >
+        <h2 className="text-3xl font-bold tracking-tighter text-center mb-8">
+            Frequently Asked Questions
+        </h2>
+        <Accordion type="single" collapsible className="w-full">
+            {faqs.map((faq, index) => (
+                <AccordionItem key={index} value={`item-${index}`}>
+                    <AccordionTrigger className="text-lg">{faq.question}</AccordionTrigger>
+                    <AccordionContent className="text-muted-foreground text-base">
+                        {faq.answer}
+                    </AccordionContent>
+                </AccordionItem>
+            ))}
+        </Accordion>
       </motion.div>
     </div>
   );
