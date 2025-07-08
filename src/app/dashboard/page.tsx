@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/auth-provider';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Code, Download, LayoutGrid, Library, Sparkles } from "lucide-react";
+import { Code, Download, LayoutGrid, Library, Sparkles, FolderKanban } from "lucide-react";
 import { motion } from "framer-motion";
 import { CodeForge } from "@/components/code-forge";
 import { ComponentShowcase } from "@/components/component-showcase";
@@ -13,9 +13,11 @@ import { UiBuilder } from "@/components/ui-builder";
 import { DesignAdvisor } from "@/components/design-advisor";
 import { ExportToolkit } from "@/components/export-toolkit";
 import { Skeleton } from '@/components/ui/skeleton';
+import { SavedSnippets } from '@/components/saved-snippets';
 
 const dashboardTabs = [
-  { value: "code-forge", label: "Code Forge", icon: <Code className="mr-2 h-5 w-5" />, title: "Simulated Prompt-to-Code", component: <CodeForge /> },
+  { value: "code-forge", label: "Code Forge", icon: <Code className="mr-2 h-5 w-5" />, title: "AI Code Generation", component: <CodeForge /> },
+  { value: "my-snippets", label: "My Snippets", icon: <FolderKanban className="mr-2 h-5 w-5" />, title: "Your Saved Snippets", component: <SavedSnippets /> },
   { value: "ui-builder", label: "UI Builder", icon: <LayoutGrid className="mr-2 h-5 w-5" />, title: "Visual Drag-and-Drop", component: <UiBuilder /> },
   { value: "design-advisor", label: "Design Advisor", icon: <Sparkles className="mr-2 h-5 w-5" />, title: "AI Style Guide", component: <DesignAdvisor /> },
   { value: "export-toolkit", label: "Export Toolkit", icon: <Download className="mr-2 h-5 w-5" />, title: "Project ZIP Download", component: <ExportToolkit /> },
@@ -66,7 +68,7 @@ export default function DashboardPage() {
         transition={{ duration: 0.5, delay: 0.2 }}
       >
         <Tabs defaultValue="code-forge" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-5">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-6">
             {dashboardTabs.map((tab) => (
               <TabsTrigger key={tab.value} value={tab.value}>
                 {tab.icon}
