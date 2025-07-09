@@ -1,6 +1,8 @@
 "use client";
 import { motion } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Card } from "@/components/ui/card";
 
 export const PortfolioPreview = () => (
   <motion.div
@@ -10,20 +12,22 @@ export const PortfolioPreview = () => (
       hidden: { opacity: 0 },
       visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
     }}
-    className="w-full h-full p-4 bg-background rounded-lg border space-y-4"
+    className="w-full h-full p-4 bg-background rounded-lg border space-y-3 text-[8px] leading-tight"
   >
-    <motion.div variants={{ hidden: { opacity: 0, y: -10 }, visible: { opacity: 1, y: 0 } }} className="flex items-center gap-3">
-        <Skeleton className="h-10 w-10 rounded-full" />
+    <motion.div variants={{ hidden: { opacity: 0, y: -10 }, visible: { opacity: 1, y: 0 } }} className="flex items-center gap-2">
+        <Avatar className="h-8 w-8">
+            <AvatarFallback>JD</AvatarFallback>
+        </Avatar>
         <div className="space-y-1">
-            <Skeleton className="h-4 w-24" />
-            <Skeleton className="h-3 w-32" />
+            <div className="font-bold text-lg">John Doe</div>
+            <div className="text-muted-foreground">Creative Developer & Designer</div>
         </div>
     </motion.div>
-    <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }} className="grid grid-cols-2 gap-3">
-        <Skeleton className="h-20 w-full rounded-md" />
-        <Skeleton className="h-20 w-full rounded-md" />
-        <Skeleton className="h-20 w-full rounded-md" />
-        <Skeleton className="h-20 w-full rounded-md" />
+    <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }} className="grid grid-cols-2 gap-2">
+        <Card><Skeleton className="h-16 w-full rounded-sm" /></Card>
+        <Card><Skeleton className="h-16 w-full rounded-sm" /></Card>
+        <Card><Skeleton className="h-16 w-full rounded-sm" /></Card>
+        <Card><Skeleton className="h-16 w-full rounded-sm" /></Card>
     </motion.div>
   </motion.div>
 );

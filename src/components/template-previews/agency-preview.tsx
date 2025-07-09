@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { Bot, PenTool, Search } from "lucide-react";
 
 export const AgencyPreview = () => (
   <motion.div
@@ -10,19 +11,26 @@ export const AgencyPreview = () => (
       hidden: { opacity: 0 },
       visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
     }}
-    className="w-full h-full p-4 bg-background rounded-lg border space-y-4"
+    className="w-full h-full p-4 bg-background rounded-lg border space-y-3 text-[8px] leading-tight"
   >
-    <motion.div variants={{ hidden: { opacity: 0, y: -10 }, visible: { opacity: 1, y: 0 } }} className="space-y-2">
-        <Skeleton className="h-6 w-2/3" />
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-6 w-24 mt-2 rounded-md" />
+    <motion.div variants={{ hidden: { opacity: 0, y: -10 }, visible: { opacity: 1, y: 0 } }} className="space-y-1">
+        <h1 className="text-xl font-bold">Creative Agency</h1>
+        <p className="text-muted-foreground">We build amazing digital experiences that users love. Let's build something great together.</p>
+        <Button size="sm" className="text-[7px] h-5 px-2 mt-1">Our Work</Button>
     </motion.div>
-    <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }} className="grid grid-cols-4 gap-3 pt-4">
-        <Skeleton className="h-6 w-full rounded-md" />
-        <Skeleton className="h-6 w-full rounded-md" />
-        <Skeleton className="h-6 w-full rounded-md" />
-        <Skeleton className="h-6 w-full rounded-md" />
+    <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }} className="grid grid-cols-3 gap-2 pt-2">
+        <div className="text-center p-1 bg-muted rounded-md space-y-1">
+            <PenTool className="w-4 h-4 mx-auto text-primary" />
+            <p className="font-bold">Design</p>
+        </div>
+        <div className="text-center p-1 bg-muted rounded-md space-y-1">
+            <Bot className="w-4 h-4 mx-auto text-primary" />
+            <p className="font-bold">Development</p>
+        </div>
+        <div className="text-center p-1 bg-muted rounded-md space-y-1">
+            <Search className="w-4 h-4 mx-auto text-primary" />
+            <p className="font-bold">SEO</p>
+        </div>
     </motion.div>
   </motion.div>
 );
