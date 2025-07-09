@@ -1,3 +1,5 @@
+"use client";
+
 import { AgencyPreview } from "./agency-preview";
 import { BlogPreview } from "./blog-preview";
 import { EcommercePreview } from "./ecommerce-preview";
