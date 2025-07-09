@@ -2,14 +2,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Code, Layers, LayoutGrid, Sparkles, PencilLine, Bot, DownloadCloud } from "lucide-react";
-import { motion } from "framer-motion"; // This import is no longer needed here, but keeping it for now to avoid breaking other parts if they implicitly rely on it. Will remove if no issues.
+// The 'motion' import is intentionally removed as this is a Server Component.
 import { MadeWithDyad } from "@/components/made-with-dyad";
 import { FeatureCard } from "@/components/feature-card";
 import { FeaturedTemplatesSection } from "@/components/sections/featured-templates-section";
 import { TestimonialSection } from "@/components/sections/testimonial-section";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { HeroClientSection } from "@/components/sections/hero-client-section"; // New import
+import { HeroClientSection } from "@/components/sections/hero-client-section";
 
 const homeFeatures = [
   {
@@ -51,15 +51,12 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       <main className="flex-1">
-        <HeroClientSection /> {/* Render the new client component here */}
+        <HeroClientSection />
 
         <section className="w-full py-24 md:py-32 border-t bg-grid-pattern">
           <div className="container mx-auto max-w-screen-xl px-4 md:px-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.5 }}
+            <div
+              // Removed motion.div as this is a Server Component
               className="flex flex-col items-center space-y-4 text-center mb-12"
             >
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
@@ -68,13 +65,10 @@ export default function Home() {
               <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                 From code generation to layout suggestions, our AI has you covered. We provide a suite of tools designed to accelerate your workflow and enhance your creativity.
               </p>
-            </motion.div>
+            </div>
             
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ staggerChildren: 0.2 }}
+            <div
+              // Removed motion.div as this is a Server Component
               className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-2 md:grid-cols-3 lg:gap-12"
             >
               {homeFeatures.map((feature, index) => (
@@ -85,13 +79,10 @@ export default function Home() {
                   description={feature.description}
                 />
               ))}
-            </motion.div>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.8 }}
-              transition={{ duration: 0.5 }}
+            <div
+              // Removed motion.div as this is a Server Component
               className="mt-12 text-center"
             >
               <Button asChild size="lg">
@@ -100,17 +91,14 @@ export default function Home() {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-            </motion.div>
+            </div>
           </div>
         </section>
 
         <section className="w-full py-24 md:py-32 bg-background/50 border-t bg-dot-pattern">
           <div className="container mx-auto max-w-screen-xl px-4 md:px-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.5 }}
+            <div
+              // Removed motion.div as this is a Server Component
               className="flex flex-col items-center space-y-4 text-center mb-12"
             >
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
@@ -119,13 +107,10 @@ export default function Home() {
               <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                 Go from idea to production-ready code faster than ever before.
               </p>
-            </motion.div>
+            </div>
             
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ staggerChildren: 0.2 }}
+            <div
+              // Removed motion.div as this is a Server Component
               className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-2 md:grid-cols-3 lg:gap-12"
             >
               {howItWorksSteps.map((step, index) => (
@@ -136,7 +121,7 @@ export default function Home() {
                   description={step.description}
                 />
               ))}
-            </motion.div>
+            </div>
           </div>
         </section>
 
@@ -149,30 +134,21 @@ export default function Home() {
         <section className="w-full py-24 md:py-32 border-t bg-gradient-to-br from-primary/10 via-background to-secondary/10">
           <div className="container mx-auto max-w-screen-xl px-4 md:px-6">
             <div className="flex flex-col items-center space-y-6 text-center">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.8 }}
-                transition={{ duration: 0.5 }}
+              <div
+                // Removed motion.div as this is a Server Component
               >
                 <h2 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
                   Ready to Build Faster?
                 </h2>
-              </motion.div>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.8 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
+              </div>
+              <p
+                // Removed motion.p as this is a Server Component
                 className="max-w-[700px] text-muted-foreground md:text-xl"
               >
                 Sign up for free and start turning your ideas into reality today. No credit card required.
-              </motion.p>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.8 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
+              </p>
+              <div
+                // Removed motion.div as this is a Server Component
               >
                 <Button asChild size="lg">
                   <Link href="/login">
@@ -180,7 +156,7 @@ export default function Home() {
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-              </motion.div>
+              </div>
             </div>
           </div>
         </section>
