@@ -2,6 +2,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 
 export const revalidate = 60;
 
@@ -49,19 +52,25 @@ export default async function BlogPostPage({
         </p>
       </header>
 
-      <div className='relative w-full h-96 mb-12'>
-        <Image
-          src={post.image_url || ""}
-          alt={post.title}
-          fill
-          className='object-cover rounded-lg'
-        />
-      </div>
+      {post.image_url && (
+        <div className='relative w-full h-96 mb-12'>
+            <Image
+            src={post.image_url}
+            alt={post.title}
+            fill
+            className='object-cover rounded-lg'
+            />
+        </div>
+      )}
 
-      <div
-        className='prose prose-lg dark:prose-invert max-w-none mx-auto space-y-6 text-muted-foreground leading-relaxed'
-        dangerouslySetInnerHTML={{ __html: post.content || "" }}
-      />
+      <div className='prose prose-lg dark:prose-invert max-w-none mx-auto'>
+        <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw]}
+        >
+            {post.content || ""}
+        </ReactMarkdown>
+      </div>
     </article>
   );
 }

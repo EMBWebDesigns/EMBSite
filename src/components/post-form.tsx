@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Post } from "@/types/blog";
 import { useEffect } from "react";
+import { MarkdownEditor } from "./markdown-editor";
 
 const postFormSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters."),
@@ -166,14 +167,10 @@ export const PostForm = ({ initialData, onSubmit, isSubmitting }: PostFormProps)
             <FormItem>
               <FormLabel>Content</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="The full content of the post. You can use HTML."
-                  className="resize-y min-h-[300px]"
-                  {...field}
-                />
+                <MarkdownEditor {...field} />
               </FormControl>
               <FormDescription>
-                You can use basic HTML tags like &lt;p&gt;, &lt;h3&gt;, etc. for formatting.
+                You can use Markdown for formatting, including headers, lists, bold text, and code blocks.
               </FormDescription>
               <FormMessage />
             </FormItem>
