@@ -3,12 +3,11 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Folder, File, Copy, Download } from "lucide-react";
+import { Download } from "lucide-react";
 import { toast } from "sonner";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { cn } from "@/lib/utils";
+import { FileTree } from "./export-toolkit/file-tree"; // Corrected to relative import
+import { CodeViewer } from "./export-toolkit/code-viewer"; // Corrected to relative import
 
 const fileContents: Record<string, string> = {
   "package.json": `{
@@ -426,42 +425,8 @@ const fileTree = [
   { name: "tailwind.config.ts", type: "file", path: "tailwind.config.ts" },
 ];
 
-const FileTreeItem = ({ item, level = 0, onSelect, selectedFile }: { item: any; level?: number; onSelect: (path: string) => void; selectedFile: string | null }) => (
-  <button
-    onClick={() => item.type === 'file' && onSelect(item.path)}
-    disabled={item.type === 'folder'}
-    className={cn(
-      "w-full text-left flex items-center text-sm px-2 py-1.5 rounded-md",
-      item.type === 'folder' ? 'cursor-default text-muted-foreground' : 'hover:bg-muted',
-      selectedFile === item.path && 'bg-muted'
-    )}
-    style={{ paddingLeft: `${level * 1.5 + 0.5}rem` }}
-  >
-    {item.type === 'folder' ? <Folder className="h-4 w-4 mr-2 text-primary" /> : <File className="h-4 w-4 mr-2 text-muted-foreground" />}
-    <span>{item.name}</span>
-  </button>
-);
-
-const RenderFileTree = ({ tree, level = 0, onSelect, selectedFile }: { tree: any[]; level?: number; onSelect: (path: string) => void; selectedFile: string | null }) => (
-  <>
-    {tree.map(item => (
-      <div key={item.name}>
-        <FileTreeItem item={item} level={level} onSelect={onSelect} selectedFile={selectedFile} />
-        {item.children && <RenderFileTree tree={item.children} level={level + 1} onSelect={onSelect} selectedFile={selectedFile} />}
-      </div>
-    ))}
-  </>
-);
-
 export const ExportToolkit = () => {
   const [selectedFile, setSelectedFile] = useState<string | null>("src/app/(marketing)/page.tsx");
-
-  const handleCopy = () => {
-    if (selectedFile && fileContents[selectedFile]) {
-      navigator.clipboard.writeText(fileContents[selectedFile]);
-      toast.success("Code copied to clipboard!");
-    }
-  };
 
   const handleDownloadZip = () => {
     toast.success("Simulating download...", {
@@ -470,6 +435,9 @@ export const ExportToolkit = () => {
     });
   };
 
+  const currentFileContent = selectedFile ? fileContents[selectedFile] : "";
+  const currentFileLanguage = selectedFile?.endsWith('.tsx') || selectedFile?.endsWith('.jsx') ? 'tsx' : 'json';
+
   return (
     <Card className="overflow-hidden">
       <CardContent className="p-0">
@@ -477,41 +445,18 @@ export const ExportToolkit = () => {
           <ResizablePanel defaultSize={30} minSize={20}>
             <div className="p-4 h-full">
               <h3 className="font-semibold mb-2">File Explorer</h3>
-              <div className="font-mono space-y-1">
-                <RenderFileTree tree={fileTree} onSelect={setSelectedFile} selectedFile={selectedFile} />
-              </div>
+              <FileTree tree={fileTree} onSelect={setSelectedFile} selectedFile={selectedFile} />
             </div>
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel defaultSize={70}>
-            <div className="relative h-full">
-              {selectedFile && (
-                <Button
-                  size="sm"
-                  onClick={handleCopy}
-                  className="absolute top-4 right-4 z-10"
-                >
-                  <Copy className="mr-2 h-4 w-4" />
-                  Copy
-                </Button>
-              )}
-              <div className="h-full bg-[#282c34] overflow-y-auto">
-                {selectedFile ? (
-                  <SyntaxHighlighter
-                    language="tsx"
-                    style={atomDark}
-                    customStyle={{ margin: 0, padding: "1.5rem", backgroundColor: "transparent", height: '100%' }}
-                    showLineNumbers
-                  >
-                    {fileContents[selectedFile]}
-                  </SyntaxHighlighter>
-                ) : (
-                  <div className="flex items-center justify-center h-full text-muted-foreground">
-                    <p>Select a file to view its content.</p>
-                  </div>
-                )}
+            {selectedFile ? (
+              <CodeViewer codeString={currentFileContent} language={currentFileLanguage} />
+            ) : (
+              <div className="flex items-center justify-center h-full text-muted-foreground">
+                <p>Select a file to view its content.</p>
               </div>
-            </div>
+            )}
           </ResizablePanel>
         </ResizablePanelGroup>
       </CardContent>
