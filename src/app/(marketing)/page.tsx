@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Code, Layers, LayoutGrid, Sparkles, PencilLine, Bot, DownloadCloud } from "lucide-react";
 import { motion } from "framer-motion";
@@ -50,7 +51,15 @@ export default function Home() {
     <div className="flex flex-col">
       <main className="flex-1">
         <section className="relative w-full py-24 md:py-32 lg:py-40 flex items-center min-h-[calc(100vh-10rem)]">
-          <div className="absolute inset-0 -z-10 h-full w-full bg-background bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
+          <div className="absolute inset-0 -z-20">
+            <Image
+              src="https://images.unsplash.com/photo-1550026593-de5480a75034?q=80&w=2194&auto=format&fit=crop"
+              alt="Abstract background"
+              fill
+              className="object-cover"
+            />
+          </div>
+          <div className="absolute inset-0 -z-10 bg-background/60 bg-gradient-to-b from-background/20 via-background/80 to-background" />
 
           <div className="container mx-auto max-w-screen-xl px-4 md:px-6">
             <div className="flex flex-col items-center space-y-6 text-center">
