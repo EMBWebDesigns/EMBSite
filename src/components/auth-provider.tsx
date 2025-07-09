@@ -9,6 +9,7 @@ type Profile = {
   id: string;
   full_name: string;
   avatar_url: string;
+  role: string; // Added role to the Profile type
 };
 
 type AuthContextType = {
