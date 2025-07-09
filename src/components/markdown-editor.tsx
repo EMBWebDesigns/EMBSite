@@ -24,11 +24,10 @@ export const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
       </ResizablePanel>
       <ResizableHandle withHandle />
       <ResizablePanel defaultSize={50}>
-        <div className="p-6 h-full overflow-y-auto">
+        <div className="p-6 h-full overflow-y-auto prose dark:prose-invert max-w-none">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             rehypePlugins={[rehypeRaw]}
-            className="prose dark:prose-invert max-w-none"
           >
             {value || "Preview will appear here..."}
           </ReactMarkdown>

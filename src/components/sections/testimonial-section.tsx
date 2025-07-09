@@ -10,53 +10,28 @@ import {
 } from "@/components/ui/carousel";
 import { TestimonialCard } from "@/components/testimonial-card";
 import { motion } from "framer-motion";
-
-const testimonials = [
-  {
-    quote: "This tool has supercharged my workflow. I can prototype ideas in minutes instead of hours. It's an absolute game-changer.",
-    name: "Sarah Dayan",
-    title: "Frontend Developer @ TechCorp",
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-    initials: "SD",
-  },
-  {
-    quote: "As a designer who codes, emb.web is the perfect bridge. I can bring my visual ideas to life without getting stuck on boilerplate code.",
-    name: "Carlos Rodriguez",
-    title: "UI/UX Designer",
-    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-    initials: "CR",
-  },
-  {
-    quote: "The quality of the generated code is surprisingly high. It's clean, follows best practices, and is easy to customize.",
-    name: "Mei Lin",
-    title: "Full-Stack Engineer",
-    avatar: "https://randomuser.me/api/portraits/women/68.jpg",
-    initials: "ML",
-  },
-  {
-    quote: "The UI Builder is incredibly intuitive. I was able to assemble a complex landing page in under an hour. Highly recommended!",
-    name: "Alex Johnson",
-    title: "Project Manager @ Innovate Inc.",
-    avatar: "https://randomuser.me/api/portraits/men/46.jpg",
-    initials: "AJ",
-  },
-  {
-    quote: "As a freelance developer, speed is everything. emb.web helps me deliver high-quality websites to my clients faster than ever before.",
-    name: "Emily White",
-    title: "Freelance Web Developer",
-    avatar: "https://randomuser.me/api/portraits/women/33.jpg",
-    initials: "EW",
-  },
-  {
-    quote: "The perfect tool for validating startup ideas. I can spin up a professional-looking landing page and start gathering feedback in no time.",
-    name: "David Chen",
-    title: "Startup Founder",
-    avatar: "https://randomuser.me/api/portraits/men/75.jpg",
-    initials: "DC",
-  },
-];
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { Testimonial } from "@/types/testimonial";
+import { Skeleton } from "../ui/skeleton";
 
 export const TestimonialSection = () => {
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      setLoading(true);
+      const { data } = await supabase
+        .from("testimonials")
+        .select("*")
+        .order("created_at", { ascending: false });
+      setTestimonials(data || []);
+      setLoading(false);
+    };
+    fetchTestimonials();
+  }, []);
+
   return (
     <section className="relative w-full py-24 md:py-32 border-t">
       <div className="absolute inset-0 -z-20">
@@ -84,31 +59,37 @@ export const TestimonialSection = () => {
           </p>
         </motion.div>
 
-        <Carousel
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-          className="w-full max-w-5xl mx-auto"
-        >
-          <CarouselContent>
-            {testimonials.map((testimonial, index) => (
-              <CarouselItem key={index} className="basis-full md:basis-1/2">
-                <div className="p-1 h-full">
-                  <TestimonialCard
-                    quote={testimonial.quote}
-                    name={testimonial.name}
-                    title={testimonial.title}
-                    avatar={testimonial.avatar}
-                    initials={testimonial.initials}
-                  />
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="flex" />
-          <CarouselNext className="flex" />
-        </Carousel>
+        {loading ? (
+          <div className="flex justify-center">
+            <Skeleton className="h-48 w-full max-w-5xl" />
+          </div>
+        ) : (
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            className="w-full max-w-5xl mx-auto"
+          >
+            <CarouselContent>
+              {testimonials.map((testimonial) => (
+                <CarouselItem key={testimonial.id} className="basis-full md:basis-1/2">
+                  <div className="p-1 h-full">
+                    <TestimonialCard
+                      quote={testimonial.quote}
+                      name={testimonial.name}
+                      title={testimonial.title}
+                      avatar={testimonial.avatar_url || ''}
+                      initials={testimonial.initials || '??'}
+                    />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="flex" />
+            <CarouselNext className="flex" />
+          </Carousel>
+        )}
       </div>
     </section>
   );

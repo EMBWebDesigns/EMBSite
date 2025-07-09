@@ -11,6 +11,7 @@ import {
   Sparkles,
   FolderKanban,
   Newspaper,
+  MessageSquareQuote,
 } from "lucide-react";
 import { CodeForge } from "@/components/code-forge";
 import { ComponentShowcase } from "@/components/component-showcase";
@@ -20,6 +21,7 @@ import { ExportToolkit } from "@/components/export-toolkit";
 import { SavedSnippets } from "@/components/saved-snippets";
 import { BlogAdmin } from "@/components/blog-admin";
 import { cn } from "@/lib/utils";
+import { TestimonialAdmin } from "./testimonial-admin";
 
 const dashboardTabs = [
   {
@@ -60,6 +62,13 @@ const dashboardTabs = [
     component: <BlogAdmin />,
   },
   {
+    value: "testimonials",
+    label: "Testimonials",
+    icon: <MessageSquareQuote className='mr-2 h-5 w-5' />,
+    title: "Testimonial Management",
+    component: <TestimonialAdmin />,
+  },
+  {
     value: "export-toolkit",
     label: "Export Toolkit",
     icon: <Download className='mr-2 h-5 w-5' />,
@@ -92,7 +101,7 @@ export function DashboardClient() {
       onValueChange={handleTabChange}
       className='w-full'
     >
-      <TabsList className='grid w-full grid-cols-2 sm:grid-cols-4 lg:grid-cols-7'>
+      <TabsList className='grid w-full grid-cols-2 sm:grid-cols-4 lg:grid-cols-8'>
         {dashboardTabs.map((tab) => (
           <TabsTrigger key={tab.value} value={tab.value}>
             {tab.icon}

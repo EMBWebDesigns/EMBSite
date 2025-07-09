@@ -167,7 +167,7 @@ export const PostForm = ({ initialData, onSubmit, isSubmitting }: PostFormProps)
             <FormItem>
               <FormLabel>Content</FormLabel>
               <FormControl>
-                <MarkdownEditor {...field} />
+                <MarkdownEditor {...field} value={field.value ?? ""} />
               </FormControl>
               <FormDescription>
                 You can use Markdown for formatting, including headers, lists, bold text, and code blocks.
