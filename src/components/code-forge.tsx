@@ -38,22 +38,37 @@ export const CodeForge = () => {
     setGeneratedCode("");
     setIsCodeGenerated(false);
 
-    const { data, error } = await supabase.functions.invoke('generate-code', {
-      body: { prompt },
-    });
+    // Simulate API call with random content
+    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
 
-    setIsLoading(false);
+    const randomContent = `// Generated code for: ${prompt}
 
-    if (error || data.error) {
-      const errorMessage = error?.message || data?.error;
-      console.error("Function error:", errorMessage);
-      toast.error("Failed to generate code.", { description: errorMessage });
-      setGeneratedCode(`// Error: ${errorMessage}`);
-      return;
-    }
+import React from 'react';
 
-    setGeneratedCode(data.code || "// No code was generated.");
+const GeneratedComponent = () => {
+  return (
+    <div className="p-4 bg-card rounded-lg shadow-md">
+      <h2 className="text-xl font-semibold text-foreground mb-2">
+        ${prompt.split(' ')[0] || 'Random'} Component
+      </h2>
+      <p className="text-muted-foreground">
+        This is a placeholder component generated based on your prompt.
+        <br/>
+        Current timestamp: ${new Date().toLocaleString()}
+      </p>
+      <button className="mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90">
+        Click Me!
+      </button>
+    </div>
+  );
+};
+
+export default GeneratedComponent;
+`;
+
+    setGeneratedCode(randomContent);
     setIsCodeGenerated(true);
+    setIsLoading(false);
   };
 
   const handleSave = async () => {

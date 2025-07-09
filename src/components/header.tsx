@@ -62,7 +62,7 @@ export const Header = () => {
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant='ghost' size='icon'>
-                  <Menu className='h-6 w-6' />
+                  <Menu className='h-20 w-20' />
                   <span className='sr-only'>Toggle Menu</span>
                 </Button>
               </SheetTrigger>
