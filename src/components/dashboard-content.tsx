@@ -12,7 +12,8 @@ import {
   Newspaper,
   MessageSquareQuote,
   Share2,
-  Contact, // Added for contact info
+  Contact,
+  Lock, // New icon for permission denied
 } from "lucide-react";
 import { CodeForge } from "@/components/code-forge";
 import { ComponentShowcase } from "@/components/component-showcase";
@@ -24,7 +25,8 @@ import { BlogAdmin } from "@/components/blog-admin";
 import { cn } from "@/lib/utils";
 import { TestimonialAdmin } from "./testimonial-admin";
 import { SocialLinksAdmin } from "./social-links-admin";
-import { ContactInfoAdmin } from "./contact-info-admin"; // New import
+import { ContactInfoAdmin } from "./contact-info-admin";
+import { useAuth } from "./auth-provider"; // Import useAuth
 
 const dashboardTabs = [
   {
@@ -34,6 +36,7 @@ const dashboardTabs = [
     title: "AI Code Generation",
     component: <CodeForge />,
     noPadding: true,
+    roles: ['user', 'admin'],
   },
   {
     value: "my-snippets",
@@ -41,6 +44,7 @@ const dashboardTabs = [
     icon: <FolderKanban className='mr-2 h-5 w-5' />,
     title: "Your Saved Snippets",
     component: <SavedSnippets />,
+    roles: ['user', 'admin'],
   },
   {
     value: "ui-builder",
@@ -49,6 +53,7 @@ const dashboardTabs = [
     title: "Visual Drag-and-Drop",
     component: <UiBuilder />,
     noPadding: true,
+    roles: ['user', 'admin'],
   },
   {
     value: "design-advisor",
@@ -56,6 +61,7 @@ const dashboardTabs = [
     icon: <Sparkles className='mr-2 h-5 w-5' />,
     title: "AI Style Guide",
     component: <DesignAdvisor />,
+    roles: ['user', 'admin'],
   },
   {
     value: "blog-admin",
@@ -63,6 +69,7 @@ const dashboardTabs = [
     icon: <Newspaper className='mr-2 h-5 w-5' />,
     title: "Blog Content Management",
     component: <BlogAdmin />,
+    roles: ['admin'], // Admin only
   },
   {
     value: "testimonials",
@@ -70,6 +77,7 @@ const dashboardTabs = [
     icon: <MessageSquareQuote className='mr-2 h-5 w-5' />,
     title: "Testimonial Management",
     component: <TestimonialAdmin />,
+    roles: ['admin'], // Admin only
   },
   {
     value: "social-links",
@@ -77,13 +85,15 @@ const dashboardTabs = [
     icon: <Share2 className='mr-2 h-5 w-5' />,
     title: "Social Media Links Management",
     component: <SocialLinksAdmin />,
+    roles: ['admin'], // Admin only
   },
   {
-    value: "contact-info", // New tab entry
+    value: "contact-info",
     label: "Contact Info",
     icon: <Contact className='mr-2 h-5 w-5' />,
     title: "Contact Information Management",
     component: <ContactInfoAdmin />,
+    roles: ['admin'], // Admin only
   },
   {
     value: "export-toolkit",
@@ -91,7 +101,7 @@ const dashboardTabs = [
     icon: <Download className='mr-2 h-5 w-5' />,
     title: "Project ZIP Download",
     component: <ExportToolkit />,
-    noPadding: true,
+    roles: ['user', 'admin'],
   },
   {
     value: "component-library",
@@ -99,28 +109,48 @@ const dashboardTabs = [
     icon: <Library className='mr-2 h-5 w-5' />,
     title: "Reusable Blocks",
     component: <ComponentShowcase />,
+    roles: ['user', 'admin'],
   },
 ];
 
 export function DashboardContent() {
   const searchParams = useSearchParams();
   const currentTab = searchParams.get("tab") || "code-forge";
+  const { profile, loading: authLoading } = useAuth();
 
   const activeTab = dashboardTabs.find(tab => tab.value === currentTab);
 
-  if (!activeTab) {
-    // Fallback for invalid tab, maybe render the first tab
-    const defaultTab = dashboardTabs[0];
+  if (authLoading) {
     return (
-       <Card className="overflow-hidden">
+      <Card className="overflow-hidden">
         <CardHeader>
-          <CardTitle>{defaultTab.title}</CardTitle>
+          <CardTitle><div className="h-8 w-1/2 bg-muted rounded-lg animate-pulse" /></CardTitle>
         </CardHeader>
-        <CardContent className={cn(defaultTab.noPadding && "p-0")}>
-          {defaultTab.component}
+        <CardContent>
+          <div className="h-96 w-full bg-muted rounded-lg animate-pulse" />
         </CardContent>
       </Card>
-    )
+    );
+  }
+
+  const userRole = profile?.role;
+
+  // Check if the active tab exists and if the user has permission to view it
+  if (!activeTab || !activeTab.roles.includes(userRole || '')) {
+    return (
+      <Card className="overflow-hidden">
+        <CardHeader>
+          <CardTitle className="flex items-center text-destructive">
+            <Lock className="mr-2 h-5 w-5" />
+            Permission Denied
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-6 text-muted-foreground">
+          <p>You do not have the necessary permissions to view this section.</p>
+          <p className="mt-2">Please contact an administrator if you believe this is an error.</p>
+        </CardContent>
+      </Card>
+    );
   }
 
   return (
