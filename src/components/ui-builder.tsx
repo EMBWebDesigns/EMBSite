@@ -6,11 +6,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
 import { PlusCircle, Trash2, GripVertical } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
-type ComponentType = 'button' | 'card' | 'input' | 'textarea';
+type ComponentType = 'button' | 'card' | 'input' | 'textarea' | 'checkbox' | 'radio-group' | 'select' | 'slider';
 
 interface CanvasComponent {
   id: string;
@@ -65,6 +69,46 @@ export const UiBuilder = () => {
             <Textarea id={`textarea-${comp.id}`} placeholder="Write a message..." {...comp.props} />
           </div>
         );
+      case 'checkbox':
+        return (
+          <div className="flex items-center space-x-2">
+            <Checkbox id={`checkbox-${comp.id}`} {...comp.props} />
+            <Label htmlFor={`checkbox-${comp.id}`}>Accept terms and conditions</Label>
+          </div>
+        );
+      case 'radio-group':
+        return (
+          <RadioGroup defaultValue="option-one" {...comp.props}>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="option-one" id={`option-one-${comp.id}`} />
+              <Label htmlFor={`option-one-${comp.id}`}>Option One</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="option-two" id={`option-two-${comp.id}`} />
+              <Label htmlFor={`option-two-${comp.id}`}>Option Two</Label>
+            </div>
+          </RadioGroup>
+        );
+      case 'select':
+        return (
+          <Select {...comp.props}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select a fruit" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="apple">Apple</SelectItem>
+              <SelectItem value="banana">Banana</SelectItem>
+              <SelectItem value="grape">Grape</SelectItem>
+            </SelectContent>
+          </Select>
+        );
+      case 'slider':
+        return (
+          <div className="w-full">
+            <Label>Volume</Label>
+            <Slider defaultValue={[50]} max={100} step={1} className="w-[60%]" {...comp.props} />
+          </div>
+        );
       default:
         return null;
     }
@@ -88,6 +132,18 @@ export const UiBuilder = () => {
           <Button variant="outline" className="justify-start" onClick={() => addComponentToCanvas('textarea')}>
             <PlusCircle className="mr-2 h-4 w-4" /> Textarea
           </Button>
+          <Button variant="outline" className="justify-start" onClick={() => addComponentToCanvas('checkbox')}>
+            <PlusCircle className="mr-2 h-4 w-4" /> Checkbox
+          </Button>
+          <Button variant="outline" className="justify-start" onClick={() => addComponentToCanvas('radio-group')}>
+            <PlusCircle className="mr-2 h-4 w-4" /> Radio Group
+          </Button>
+          <Button variant="outline" className="justify-start" onClick={() => addComponentToCanvas('select')}>
+            <PlusCircle className="mr-2 h-4 w-4" /> Select
+          </Button>
+          <Button variant="outline" className="justify-start" onClick={() => addComponentToCanvas('slider')}>
+            <PlusCircle className="mr-2 h-4 w-4" /> Slider
+          </Button>
         </div>
       </div>
 
@@ -97,7 +153,7 @@ export const UiBuilder = () => {
         <div className="min-h-full border border-dashed rounded-lg p-4 space-y-4 bg-card/30">
           {canvasComponents.length === 0 ? (
             <div className="text-center text-muted-foreground py-12">
-              Drag components from the left or click to add them.
+              Click a component from the left to add it to the canvas.
             </div>
           ) : (
             canvasComponents.map((comp) => (
