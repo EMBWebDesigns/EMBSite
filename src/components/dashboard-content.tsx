@@ -1,7 +1,6 @@
 "use client";
 
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useSearchParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Code,
@@ -85,43 +84,35 @@ const dashboardTabs = [
   },
 ];
 
-export function DashboardClient() {
-  const router = useRouter();
-  const pathname = usePathname();
+export function DashboardContent() {
   const searchParams = useSearchParams();
   const currentTab = searchParams.get("tab") || "code-forge";
 
-  const handleTabChange = (value: string) => {
-    router.push(`${pathname}?tab=${value}`);
-  };
+  const activeTab = dashboardTabs.find(tab => tab.value === currentTab);
+
+  if (!activeTab) {
+    // Fallback for invalid tab, maybe render the first tab
+    const defaultTab = dashboardTabs[0];
+    return (
+       <Card className="overflow-hidden">
+        <CardHeader>
+          <CardTitle>{defaultTab.title}</CardTitle>
+        </CardHeader>
+        <CardContent className={cn(defaultTab.noPadding && "p-0")}>
+          {defaultTab.component}
+        </CardContent>
+      </Card>
+    )
+  }
 
   return (
-    <Tabs
-      value={currentTab}
-      onValueChange={handleTabChange}
-      className='w-full'
-    >
-      <TabsList className='grid w-full grid-cols-2 sm:grid-cols-4 lg:grid-cols-8'>
-        {dashboardTabs.map((tab) => (
-          <TabsTrigger key={tab.value} value={tab.value}>
-            {tab.icon}
-            {tab.label}
-          </TabsTrigger>
-        ))}
-      </TabsList>
-
-      {dashboardTabs.map((tab) => (
-        <TabsContent key={tab.value} value={tab.value} className='mt-6'>
-          <Card className="overflow-hidden">
-            <CardHeader>
-              <CardTitle>{tab.title}</CardTitle>
-            </CardHeader>
-            <CardContent className={cn(tab.noPadding && "p-0")}>
-              {tab.component}
-            </CardContent>
-          </Card>
-        </TabsContent>
-      ))}
-    </Tabs>
+    <Card className="overflow-hidden">
+      <CardHeader>
+        <CardTitle>{activeTab.title}</CardTitle>
+      </CardHeader>
+      <CardContent className={cn(activeTab.noPadding && "p-0")}>
+        {activeTab.component}
+      </CardContent>
+    </Card>
   );
 }
