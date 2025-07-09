@@ -19,7 +19,8 @@ import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { Mail, Building, User, Loader2, Clock, Phone } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { ContactInfo } from "@/types/contact-info"; // Import ContactInfo type
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -36,6 +37,9 @@ const formSchema = z.object({
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null);
+  const [loadingContactInfo, setLoadingContactInfo] = useState(true);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -45,6 +49,25 @@ export default function ContactPage() {
       message: "",
     },
   });
+
+  useEffect(() => {
+    const fetchContactInfo = async () => {
+      setLoadingContactInfo(true);
+      const { data, error } = await supabase
+        .from("contact_info")
+        .select("*")
+        .single();
+
+      if (error && error.code !== 'PGRST116') { // PGRST116 means no rows found
+        console.error("Failed to fetch contact info:", error.message);
+      } else if (data) {
+        setContactInfo(data as ContactInfo);
+      }
+      setLoadingContactInfo(false);
+    };
+
+    fetchContactInfo();
+  }, []);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
@@ -185,29 +208,73 @@ export default function ContactPage() {
             <p className="text-muted-foreground">
                 Find us here. Our team is available during standard business hours to assist you.
             </p>
-            <div className="space-y-4">
+            {loadingContactInfo ? (
+              <div className="space-y-4">
                 <div className="flex items-center gap-4">
-                    <Mail className="h-6 w-6 text-primary" />
-                    <div>
-                        <h3 className="font-semibold">Email</h3>
-                        <a href="mailto:support@emb.web" className="text-muted-foreground hover:text-primary">support@emb.web</a>
-                    </div>
+                  <Phone className="h-6 w-6 text-primary animate-pulse" />
+                  <div className="w-full">
+                    <div className="h-4 bg-muted rounded w-1/2 mb-1"></div>
+                    <div className="h-4 bg-muted rounded w-3/4"></div>
+                  </div>
                 </div>
                 <div className="flex items-center gap-4">
-                    <Phone className="h-6 w-6 text-primary" />
-                    <div>
-                        <h3 className="font-semibold">Phone</h3>
-                        <p className="text-muted-foreground">(555) 123-4567</p>
-                    </div>
+                  <Mail className="h-6 w-6 text-primary animate-pulse" />
+                  <div className="w-full">
+                    <div className="h-4 bg-muted rounded w-1/2 mb-1"></div>
+                    <div className="h-4 bg-muted rounded w-3/4"></div>
+                  </div>
                 </div>
                 <div className="flex items-center gap-4">
-                    <Clock className="h-6 w-6 text-primary" />
-                    <div>
-                        <h3 className="font-semibold">Business Hours</h3>
-                        <p className="text-muted-foreground">Monday - Friday: 9am - 5pm EST</p>
-                    </div>
+                  <Clock className="h-6 w-6 text-primary animate-pulse" />
+                  <div className="w-full">
+                    <div className="h-4 bg-muted rounded w-1/2 mb-1"></div>
+                    <div className="h-4 bg-muted rounded w-3/4"></div>
+                  </div>
                 </div>
-            </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {contactInfo?.phone && (
+                  <div className="flex items-center gap-4">
+                      <Phone className="h-6 w-6 text-primary" />
+                      <div>
+                          <h3 className="font-semibold">Phone</h3>
+                          <p className="text-muted-foreground">{contactInfo.phone}</p>
+                      </div>
+                  </div>
+                )}
+                {contactInfo?.email && (
+                  <div className="flex items-center gap-4">
+                      <Mail className="h-6 w-6 text-primary" />
+                      <div>
+                          <h3 className="font-semibold">Email</h3>
+                          <a href={`mailto:${contactInfo.email}`} className="text-muted-foreground hover:text-primary">{contactInfo.email}</a>
+                      </div>
+                  </div>
+                )}
+                {contactInfo?.address && (
+                  <div className="flex items-center gap-4">
+                      <Building className="h-6 w-6 text-primary" />
+                      <div>
+                          <h3 className="font-semibold">Address</h3>
+                          <p className="text-muted-foreground">{contactInfo.address}</p>
+                      </div>
+                  </div>
+                )}
+                {contactInfo?.business_hours && (
+                  <div className="flex items-center gap-4">
+                      <Clock className="h-6 w-6 text-primary" />
+                      <div>
+                          <h3 className="font-semibold">Business Hours</h3>
+                          <p className="text-muted-foreground">{contactInfo.business_hours}</p>
+                      </div>
+                  </div>
+                )}
+                {!contactInfo && (
+                  <p className="text-muted-foreground">No contact information available. Please add it via the dashboard.</p>
+                )}
+              </div>
+            )}
         </motion.div>
       </div>
     </div>
