@@ -34,7 +34,7 @@ export const TemplateCard = ({ title, description, previewKey }: TemplateCardPro
     <Dialog>
       <motion.div variants={cardVariants}>
         <Card className="h-full overflow-hidden transition-shadow hover:shadow-lg flex flex-col">
-          <AspectRatio ratio={16 / 9} className="bg-muted">
+          <AspectRatio ratio={16 / 9} className="bg-muted overflow-hidden">
             {PreviewComponent}
           </AspectRatio>
           <CardHeader>
