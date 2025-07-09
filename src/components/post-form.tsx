@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Post } from "@/types/blog";
 import { useEffect } from "react";
-import { MarkdownEditor } from "./markdown-editor";
+// import { MarkdownEditor } from "./markdown-editor"; // Removed MarkdownEditor import
 
 const postFormSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters."),
@@ -165,12 +165,16 @@ export const PostForm = ({ initialData, onSubmit, isSubmitting }: PostFormProps)
           name="content"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Content</FormLabel>
+              <FormLabel>Content (HTML)</FormLabel>
               <FormControl>
-                <MarkdownEditor {...field} value={field.value ?? ""} />
+                <Textarea
+                  placeholder="Write your post content here using HTML..."
+                  className="min-h-[300px] resize-y font-mono"
+                  {...field}
+                />
               </FormControl>
               <FormDescription>
-                You can use Markdown for formatting, including headers, lists, bold text, and code blocks.
+                Enter your blog post content in HTML format.
               </FormDescription>
               <FormMessage />
             </FormItem>
