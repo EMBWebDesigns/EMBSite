@@ -95,7 +95,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="w-full py-24 md:py-32 border-t">
+        <section className="w-full py-24 md:py-32 border-t bg-grid-pattern">
           <div className="container mx-auto max-w-screen-xl px-4 md:px-6">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -146,7 +146,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="w-full py-24 md:py-32 bg-background/50 border-t">
+        <section className="w-full py-24 md:py-32 bg-background/50 border-t bg-dot-pattern">
           <div className="container mx-auto max-w-screen-xl px-4 md:px-6">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -186,7 +186,7 @@ export default function Home() {
 
         <FeaturedTemplatesSection />
 
-        <section className="w-full py-24 md:py-32 border-t">
+        <section className="w-full py-24 md:py-32 border-t bg-gradient-to-br from-primary/10 via-background to-secondary/10">
           <div className="container mx-auto max-w-screen-xl px-4 md:px-6">
             <div className="flex flex-col items-center space-y-6 text-center">
               <motion.div
