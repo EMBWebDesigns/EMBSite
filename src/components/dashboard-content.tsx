@@ -11,6 +11,7 @@ import {
   FolderKanban,
   Newspaper,
   MessageSquareQuote,
+  Share2, // Added for social links
 } from "lucide-react";
 import { CodeForge } from "@/components/code-forge";
 import { ComponentShowcase } from "@/components/component-showcase";
@@ -21,6 +22,7 @@ import { SavedSnippets } from "@/components/saved-snippets";
 import { BlogAdmin } from "@/components/blog-admin";
 import { cn } from "@/lib/utils";
 import { TestimonialAdmin } from "./testimonial-admin";
+import { SocialLinksAdmin } from "./social-links-admin"; // New import
 
 const dashboardTabs = [
   {
@@ -66,6 +68,13 @@ const dashboardTabs = [
     icon: <MessageSquareQuote className='mr-2 h-5 w-5' />,
     title: "Testimonial Management",
     component: <TestimonialAdmin />,
+  },
+  {
+    value: "social-links", // New tab entry
+    label: "Social Links",
+    icon: <Share2 className='mr-2 h-5 w-5' />,
+    title: "Social Media Links Management",
+    component: <SocialLinksAdmin />,
   },
   {
     value: "export-toolkit",

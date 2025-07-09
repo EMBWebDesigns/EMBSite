@@ -12,6 +12,7 @@ import {
   FolderKanban,
   Newspaper,
   MessageSquareQuote,
+  Share2, // Added for social links
 } from "lucide-react";
 
 const dashboardLinks = [
@@ -44,6 +45,11 @@ const dashboardLinks = [
     value: "testimonials",
     label: "Testimonials",
     icon: <MessageSquareQuote className='h-5 w-5' />,
+  },
+  {
+    value: "social-links", // New link
+    label: "Social Links", // New label
+    icon: <Share2 className='h-5 w-5' />, // New icon
   },
   {
     value: "export-toolkit",
