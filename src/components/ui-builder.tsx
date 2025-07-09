@@ -1,94 +1,51 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlusCircle, Trash2 } from 'lucide-react';
-import { HeroSection } from '@/components/sections/hero-section';
-import { FeatureSection } from '@/components/sections/feature-section';
-import { CtaSection } from '@/components/sections/cta-section';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { LayoutGrid, Square, Type, Image as ImageIcon, Bot } from "lucide-react";
+import { motion } from "framer-motion";
 
-// A map to easily render components by name
-const sectionComponents = {
-  'HeroSection': HeroSection,
-  'FeatureSection': FeatureSection,
-  'CtaSection': CtaSection,
-};
-
-// The list of available sections to add
-const availableSections = [
-  { id: 'HeroSection', name: 'Hero Section' },
-  { id: 'FeatureSection', name: 'Feature Section' },
-  { id: 'CtaSection', name: 'Call to Action' },
+const components = [
+  { name: "Button", icon: <Square className="h-4 w-4" /> },
+  { name: "Card", icon: <LayoutGrid className="h-4 w-4" /> },
+  { name: "Heading", icon: <Type className="h-4 w-4" /> },
+  { name: "Image", icon: <ImageIcon className="h-4 w-4" /> },
 ];
 
-type PageSection = {
-  id: string; // e.g., 'HeroSection'
-  instanceId: number; // A unique ID for this specific instance on the page
-};
-
 export const UiBuilder = () => {
-  const [pageSections, setPageSections] = useState<PageSection[]>([]);
-
-  const addSection = (sectionId: string) => {
-    const newSection: PageSection = {
-      id: sectionId,
-      instanceId: Date.now(), // Simple unique ID
-    };
-    setPageSections([...pageSections, newSection]);
-  };
-
-  const removeSection = (instanceId: number) => {
-    setPageSections(pageSections.filter(section => section.instanceId !== instanceId));
-  };
-
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
-      {/* Sidebar with available sections */}
-      <Card>
+    <div className="flex h-[600px] w-full gap-4">
+      {/* Sidebar */}
+      <Card className="w-1/4 lg:w-1/5">
         <CardHeader>
-          <CardTitle>Available Sections</CardTitle>
+            <CardTitle className="text-base">Components</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2">
-          {availableSections.map(section => (
-            <div key={section.id} className="flex items-center justify-between p-2 border rounded-md">
-              <span className="font-medium">{section.name}</span>
-              <Button size="sm" variant="ghost" onClick={() => addSection(section.id)}>
-                <PlusCircle className="h-4 w-4 mr-2" />
-                Add
+        <CardContent>
+          <div className="space-y-2">
+            {components.map((comp) => (
+              <Button key={comp.name} variant="ghost" className="w-full justify-start cursor-grab">
+                {comp.icon}
+                <span className="ml-2">{comp.name}</span>
               </Button>
-            </div>
-          ))}
+            ))}
+          </div>
         </CardContent>
       </Card>
 
-      {/* Canvas / Preview Area */}
-      <div className="border rounded-lg bg-background/50 min-h-[600px] overflow-hidden">
-        <div className="bg-white dark:bg-zinc-900 h-full w-full overflow-y-auto">
-          {pageSections.length > 0 ? (
-            pageSections.map(section => {
-              const SectionComponent = sectionComponents[section.id as keyof typeof sectionComponents];
-              return (
-                <div key={section.instanceId} className="relative group border-b last:border-b-0">
-                  <div className="absolute top-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Button
-                      variant="destructive"
-                      size="icon"
-                      onClick={() => removeSection(section.instanceId)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                  <SectionComponent />
-                </div>
-              );
-            })
-          ) : (
-            <div className="flex items-center justify-center h-full">
-              <p className="text-muted-foreground">Add sections from the left panel to build your page.</p>
-            </div>
-          )}
-        </div>
+      {/* Canvas */}
+      <div className="w-3/4 lg:w-4/5 bg-muted/30 rounded-lg border-dashed border-2 flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="text-center p-8"
+        >
+          <Bot className="h-16 w-16 mx-auto text-muted-foreground" />
+          <h2 className="mt-6 text-2xl font-bold">Visual Builder Coming Soon</h2>
+          <p className="mt-2 text-muted-foreground max-w-md mx-auto">
+            This feature is currently under construction. Soon, you'll be able to drag and drop components to build your UI visually, with AI assistance to guide you.
+          </p>
+        </motion.div>
       </div>
     </div>
   );

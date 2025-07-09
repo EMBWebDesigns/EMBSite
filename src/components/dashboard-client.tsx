@@ -43,6 +43,7 @@ const dashboardTabs = [
     icon: <LayoutGrid className='mr-2 h-5 w-5' />,
     title: "Visual Drag-and-Drop",
     component: <UiBuilder />,
+    noPadding: true,
   },
   {
     value: "design-advisor",
@@ -64,6 +65,7 @@ const dashboardTabs = [
     icon: <Download className='mr-2 h-5 w-5' />,
     title: "Project ZIP Download",
     component: <ExportToolkit />,
+    noPadding: true,
   },
   {
     value: "component-library",
@@ -105,7 +107,7 @@ export function DashboardClient() {
             <CardHeader>
               <CardTitle>{tab.title}</CardTitle>
             </CardHeader>
-            <CardContent className={cn(tab.noPadding && "p-0 pt-0")}>
+            <CardContent className={cn(tab.noPadding && "p-0")}>
               {tab.component}
             </CardContent>
           </Card>
