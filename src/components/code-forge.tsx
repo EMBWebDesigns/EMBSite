@@ -7,6 +7,7 @@ import { Loader2, Sparkles, Save } from "lucide-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { motion, AnimatePresence } from "framer-motion";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuth } from "./auth-provider";
@@ -80,57 +81,61 @@ export const CodeForge = () => {
   };
 
   return (
-    <div className="space-y-4">
-      <Textarea
-        placeholder="e.g., 'Create a responsive card component with an image and a title'"
-        value={prompt}
-        onChange={(e) => setPrompt(e.target.value)}
-        className="min-h-[100px]"
-      />
-      <div className="flex gap-2">
-        <Button onClick={handleGenerate} disabled={isLoading}>
-          {isLoading ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <Sparkles className="mr-2 h-4 w-4" />
-          )}
-          Generate Code
-        </Button>
-        {isCodeGenerated && (
-          <Button onClick={handleSave} disabled={isSaving} variant="secondary">
-            {isSaving ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <Save className="mr-2 h-4 w-4" />
+    <ResizablePanelGroup direction="vertical" className="min-h-[600px] w-full">
+      <ResizablePanel defaultSize={30}>
+        <div className="p-6 h-full flex flex-col gap-4">
+          <Textarea
+            placeholder="e.g., 'Create a responsive card component with an image and a title'"
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            className="flex-grow resize-none"
+          />
+          <div className="flex gap-2">
+            <Button onClick={handleGenerate} disabled={isLoading}>
+              {isLoading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Sparkles className="mr-2 h-4 w-4" />
+              )}
+              Generate Code
+            </Button>
+            {isCodeGenerated && (
+              <Button onClick={handleSave} disabled={isSaving} variant="secondary">
+                {isSaving ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <Save className="mr-2 h-4 w-4" />
+                )}
+                Save Snippet
+              </Button>
             )}
-            Save Snippet
-          </Button>
-        )}
-      </div>
-      <div className="mt-4 rounded-lg bg-[#282c34] overflow-hidden">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={generatedCode}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <SyntaxHighlighter
-              language="jsx"
-              style={atomDark}
-              customStyle={{
-                margin: 0,
-                padding: "1.5rem",
-                backgroundColor: "transparent",
-              }}
-              wrapLongLines
+          </div>
+        </div>
+      </ResizablePanel>
+      <ResizableHandle withHandle />
+      <ResizablePanel defaultSize={70}>
+        <div className="h-full bg-[#282c34] overflow-y-auto">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={generatedCode}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="h-full"
             >
-              {generatedCode}
-            </SyntaxHighlighter>
-          </motion.div>
-        </AnimatePresence>
-      </div>
-    </div>
+              <SyntaxHighlighter
+                language="jsx"
+                style={atomDark}
+                customStyle={{ margin: 0, padding: "1.5rem", backgroundColor: "transparent", height: "100%" }}
+                wrapLongLines
+              >
+                {generatedCode}
+              </SyntaxHighlighter>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </ResizablePanel>
+    </ResizablePanelGroup>
   );
 };

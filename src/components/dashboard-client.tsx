@@ -19,6 +19,7 @@ import { DesignAdvisor } from "@/components/design-advisor";
 import { ExportToolkit } from "@/components/export-toolkit";
 import { SavedSnippets } from "@/components/saved-snippets";
 import { BlogAdmin } from "@/components/blog-admin";
+import { cn } from "@/lib/utils";
 
 const dashboardTabs = [
   {
@@ -27,6 +28,7 @@ const dashboardTabs = [
     icon: <Code className='mr-2 h-5 w-5' />,
     title: "AI Code Generation",
     component: <CodeForge />,
+    noPadding: true,
   },
   {
     value: "my-snippets",
@@ -99,11 +101,13 @@ export function DashboardClient() {
 
       {dashboardTabs.map((tab) => (
         <TabsContent key={tab.value} value={tab.value} className='mt-6'>
-          <Card>
+          <Card className="overflow-hidden">
             <CardHeader>
               <CardTitle>{tab.title}</CardTitle>
             </CardHeader>
-            <CardContent>{tab.component}</CardContent>
+            <CardContent className={cn(tab.noPadding && "p-0 pt-0")}>
+              {tab.component}
+            </CardContent>
           </Card>
         </TabsContent>
       ))}
