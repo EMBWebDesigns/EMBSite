@@ -5,7 +5,6 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import { Eye, Layers } from "lucide-react";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import {
   Dialog,
   DialogContent,
@@ -15,11 +14,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import Link from "next/link";
+import { TemplateKey, templatePreviews } from "./template-previews";
 
 interface TemplateCardProps {
   title: string;
   description: string;
-  imageUrl: string;
+  previewKey: TemplateKey;
 }
 
 const cardVariants = {
@@ -27,18 +27,15 @@ const cardVariants = {
   visible: { opacity: 1, y: 0 },
 };
 
-export const TemplateCard = ({ title, description, imageUrl }: TemplateCardProps) => {
+export const TemplateCard = ({ title, description, previewKey }: TemplateCardProps) => {
+  const PreviewComponent = templatePreviews[previewKey];
+
   return (
     <Dialog>
       <motion.div variants={cardVariants}>
         <Card className="h-full overflow-hidden transition-shadow hover:shadow-lg flex flex-col">
-          <AspectRatio ratio={16 / 9}>
-            <Image
-              src={imageUrl}
-              alt={title}
-              fill
-              className="object-cover"
-            />
+          <AspectRatio ratio={16 / 9} className="bg-muted">
+            {PreviewComponent}
           </AspectRatio>
           <CardHeader>
             <CardTitle>{title}</CardTitle>
@@ -62,12 +59,7 @@ export const TemplateCard = ({ title, description, imageUrl }: TemplateCardProps
         </DialogHeader>
         <div className="py-4">
           <AspectRatio ratio={16 / 9} className="bg-muted rounded-md overflow-hidden">
-            <Image
-              src={imageUrl}
-              alt={title}
-              fill
-              className="object-cover"
-            />
+            {PreviewComponent}
           </AspectRatio>
         </div>
         <div className="flex justify-end">

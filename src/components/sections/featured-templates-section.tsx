@@ -5,22 +5,23 @@ import { motion } from "framer-motion";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { TemplateKey } from "../template-previews";
 
-const featuredTemplates = [
+const featuredTemplates: { title: string; description: string; previewKey: TemplateKey }[] = [
   {
     title: "SaaS Landing Page",
     description: "A modern, clean landing page perfect for any software-as-a-service product.",
-    imageUrl: "https://images.unsplash.com/photo-1559028006-44a3a4f3658b?q=80&w=2187&auto=format&fit=crop",
+    previewKey: "saas",
   },
   {
     title: "E-commerce Storefront",
     description: "A stylish and functional storefront designed to maximize conversions.",
-    imageUrl: "https://images.unsplash.com/photo-1522204523234-8729aa6e3d5f?q=80&w=2340&auto=format&fit=crop",
+    previewKey: "ecommerce",
   },
   {
     title: "Portfolio Website",
     description: "A minimalist and elegant portfolio to showcase your creative work.",
-    imageUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2340&auto=format&fit=crop",
+    previewKey: "portfolio",
   },
 ];
 
@@ -55,7 +56,7 @@ export const FeaturedTemplatesSection = () => {
               key={template.title}
               title={template.title}
               description={template.description}
-              imageUrl={template.imageUrl}
+              previewKey={template.previewKey}
             />
           ))}
         </motion.div>

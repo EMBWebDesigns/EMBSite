@@ -2,37 +2,38 @@
 
 import { TemplateCard } from "@/components/template-card";
 import { motion } from "framer-motion";
+import { TemplateKey } from "@/components/template-previews";
 
-const templates = [
+const templates: { title: string; description: string; previewKey: TemplateKey }[] = [
   {
     title: "SaaS Landing Page",
     description: "A modern, clean landing page perfect for any software-as-a-service product.",
-    imageUrl: "https://images.unsplash.com/photo-1559028006-44a3a4f3658b?q=80&w=2187&auto=format&fit=crop",
+    previewKey: "saas",
   },
   {
     title: "E-commerce Storefront",
     description: "A stylish and functional storefront designed to maximize conversions.",
-    imageUrl: "https://images.unsplash.com/photo-1522204523234-8729aa6e3d5f?q=80&w=2340&auto=format&fit=crop",
+    previewKey: "ecommerce",
   },
   {
     title: "Portfolio Website",
     description: "A minimalist and elegant portfolio to showcase your creative work.",
-    imageUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2340&auto=format&fit=crop",
+    previewKey: "portfolio",
   },
   {
     title: "Blog & Newsletter",
     description: "A content-focused template with great readability and a clean layout.",
-    imageUrl: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=2340&auto=format&fit=crop",
+    previewKey: "blog",
   },
   {
     title: "Agency Homepage",
     description: "A professional and bold design to represent your creative agency.",
-    imageUrl: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2340&auto=format&fit=crop",
+    previewKey: "agency",
   },
   {
     title: "Startup Website",
     description: "A vibrant and energetic template to launch your next big idea.",
-    imageUrl: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2232&auto=format&fit=crop",
+    previewKey: "startup",
   },
 ];
 
@@ -74,7 +75,7 @@ export default function TemplatesPage() {
             key={template.title}
             title={template.title}
             description={template.description}
-            imageUrl={template.imageUrl}
+            previewKey={template.previewKey}
           />
         ))}
       </motion.div>
