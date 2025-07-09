@@ -9,6 +9,8 @@ import { MadeWithDyad } from "@/components/made-with-dyad";
 import { FeatureCard } from "@/components/feature-card";
 import { FeaturedTemplatesSection } from "@/components/sections/featured-templates-section";
 import { TestimonialSection } from "@/components/sections/testimonial-section";
+import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const homeFeatures = [
   {
@@ -191,7 +193,9 @@ export default function Home() {
           </div>
         </section>
 
-        <TestimonialSection />
+        <Suspense fallback={<Skeleton className="h-[500px] w-full" />}>
+          <TestimonialSection />
+        </Suspense>
 
         <FeaturedTemplatesSection />
 
