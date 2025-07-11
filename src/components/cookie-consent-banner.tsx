@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/utils";
 
 const getCookie = (name: string): string | undefined => {
   if (typeof document === 'undefined') return undefined;
@@ -43,24 +42,28 @@ export const CookieConsentBanner = () => {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ y: "100%" }}
-          animate={{ y: 0 }}
-          exit={{ y: "100%" }}
+          initial={{ x: "-100%", opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          exit={{ x: "-100%", opacity: 0 }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className={cn(
-            "fixed bottom-0 left-0 right-0 z-50 w-full"
-          )}
+          className="fixed bottom-4 left-4 z-50 w-full max-w-md"
         >
-          <div className="container mx-auto max-w-screen-xl px-4 py-4 md:px-6">
-            <div className="bg-background border shadow-lg rounded-lg p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <p className="text-sm text-muted-foreground">
-                We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.{" "}
+          <div className="bg-background border shadow-lg rounded-lg p-6 space-y-4">
+            <div>
+              <h3 className="font-semibold text-foreground">Cookie Consent</h3>
+              <p className="text-sm text-muted-foreground mt-2">
+                We use cookies to improve your browsing experience and to analyze our website traffic. By clicking "Accept All", you consent to our use of cookies. You can learn more by reading our{" "}
                 <Link href="/privacy" className="underline hover:text-primary">
-                  Learn more
+                  Privacy Policy
                 </Link>.
               </p>
+            </div>
+            <div className="flex gap-2 justify-end">
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/terms">Terms of Service</Link>
+              </Button>
               <Button onClick={handleAccept} size="sm">
-                Accept
+                Accept All
               </Button>
             </div>
           </div>
