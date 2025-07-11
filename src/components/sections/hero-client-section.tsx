@@ -15,7 +15,7 @@ export const HeroClientSection = () => {
           alt='Abstract background'
           width={1920}
           height={1080}
-          className='object-cover'
+          className='object-cover h-full'
         />
       </div>
       <div className='absolute z-10 inset-0 bg-gradient-to-b from-transparent via-75% via-background/30 to-background/50' />
