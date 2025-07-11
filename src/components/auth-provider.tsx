@@ -32,7 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     setLoading(true);
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       try {
         setSession(session);
         setUser(session?.user ?? null);
@@ -44,6 +44,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             .eq('id', session.user.id)
             .single();
           setProfile(profileData);
+          if (event === 'SIGNED_IN') {
+            router.push('/dashboard');
+          }
         } else {
           setProfile(null);
         }
@@ -57,7 +60,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => {
       subscription.unsubscribe();
     };
-  }, []);
+  }, [router]);
 
   const signOut = async () => {
     await supabase.auth.signOut();

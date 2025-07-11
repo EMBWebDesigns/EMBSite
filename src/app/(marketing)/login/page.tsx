@@ -8,20 +8,19 @@ import { Logo } from '@/components/logo';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { useAuth } from '@/components/auth-provider';
 
 export default function LoginPage() {
   const { resolvedTheme } = useTheme();
   const router = useRouter();
+  const { user, loading } = useAuth();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_IN') {
-        router.push('/dashboard');
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [router]);
+    // If the user is already logged in, redirect to the dashboard.
+    if (!loading && user) {
+      router.push('/dashboard');
+    }
+  }, [user, loading, router]);
 
   return (
     <div className="container mx-auto flex min-h-[calc(100vh-8rem)] items-center justify-center px-4 py-16 md:px-6 md:py-24">
@@ -39,7 +38,6 @@ export default function LoginPage() {
           appearance={{ theme: ThemeSupa }}
           providers={['github', 'google']}
           theme={resolvedTheme === 'dark' ? 'dark' : 'light'}
-          redirectTo="/dashboard"
         />
       </motion.div>
     </div>
