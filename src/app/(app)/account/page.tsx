@@ -18,7 +18,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AvatarUploader } from "@/components/avatar-uploader";
 
@@ -30,8 +29,7 @@ const accountFormSchema = z.object({
 type AccountFormValues = z.infer<typeof accountFormSchema>;
 
 export default function AccountPage() {
-  const { user, profile, loading } = useAuth();
-  const router = useRouter();
+  const { user, profile } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<AccountFormValues>({
@@ -43,18 +41,18 @@ export default function AccountPage() {
   });
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push("/login");
-    }
+    // The redirect logic is now handled by the layout.
+    // We only need to reset the form when the profile data is available.
     if (profile) {
       form.reset({
         full_name: profile.full_name || "",
         avatar_url: profile.avatar_url || "",
       });
     }
-  }, [user, profile, loading, router, form]);
+  }, [profile, form]);
 
   async function onSubmit(data: AccountFormValues) {
+    // The layout ensures user is not null here, but we keep the check for type safety.
     if (!user) return;
     setIsSubmitting(true);
 
@@ -72,12 +70,12 @@ export default function AccountPage() {
       toast.error("Failed to update profile.", { description: error.message });
     } else {
       toast.success("Profile updated successfully!");
-      // Re-fetch session to get updated user data in the app
       supabase.auth.refreshSession();
     }
   }
 
-  if (loading || !user || !profile) {
+  // The layout handles the main loading state. We only show a skeleton if the user or profile is missing.
+  if (!profile || !user) {
     return (
       <div className="container mx-auto max-w-2xl px-4 py-16 md:px-6 md:py-24">
         <Skeleton className="h-10 w-1/2 mb-2" />
@@ -123,9 +121,6 @@ export default function AccountPage() {
                         url={field.value}
                         onUpload={(url) => {
                           field.onChange(url);
-                          // We can trigger a save immediately after upload
-                          // or let the user save all changes at once.
-                          // For simplicity, we'll let them save all at once.
                         }}
                       />
                     </FormControl>

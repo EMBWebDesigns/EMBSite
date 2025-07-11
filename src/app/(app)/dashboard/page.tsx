@@ -1,32 +1,13 @@
 "use client";
 
-import { useEffect, Suspense } from "react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/components/auth-provider";
+import { Suspense } from "react";
 import { motion } from "framer-motion";
-import { Skeleton } from "@/components/ui/skeleton";
 import { DashboardContent } from "@/components/dashboard-content";
 import { DashboardContentSkeleton } from "@/components/dashboard-content-skeleton";
 
 export default function DashboardPage() {
-  const { user, loading } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push("/login");
-    }
-  }, [user, loading, router]);
-
-  if (loading || !user) {
-    return (
-      <div>
-        <Skeleton className='h-12 w-3/4 mb-8' />
-        <DashboardContentSkeleton />
-      </div>
-    );
-  }
-
+  // The layout now handles authentication checks and loading states.
+  // This component will only render if the user is authenticated.
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
