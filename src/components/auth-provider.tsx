@@ -9,7 +9,7 @@ type Profile = {
   id: string;
   full_name: string;
   avatar_url: string;
-  role: string; // Added role to the Profile type
+  role: string;
 };
 
 type AuthContextType = {
@@ -30,40 +30,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        const { data: userProfile } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', session.user.id)
-          .single();
-        setProfile(userProfile);
-      }
-      setLoading(false);
-    };
+    setLoading(true);
 
-    getSession();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      try {
         setSession(session);
         setUser(session?.user ?? null);
+
         if (session?.user) {
-          const { data: userProfile } = await supabase
+          const { data: profileData } = await supabase
             .from('profiles')
             .select('*')
             .eq('id', session.user.id)
             .single();
-          setProfile(userProfile);
+          setProfile(profileData);
         } else {
           setProfile(null);
         }
+      } catch (error) {
+        console.error("Error in onAuthStateChange handler:", error);
+      } finally {
         setLoading(false);
       }
-    );
+    });
 
     return () => {
       subscription.unsubscribe();

@@ -14,7 +14,7 @@ export const Logo = () => {
     <Link href='/' className='flex items-center gap-2'>
       {isMounted ? (
         <Image
-          src='/logo.webp'
+          src='/images/logo.webp'
           alt='Logo'
           width={400}
           height={200}
