@@ -7,49 +7,57 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { TemplateKey } from "../template-previews";
 
-const featuredTemplates: { title: string; description: string; previewKey: TemplateKey }[] = [
+const featuredTemplates: {
+  title: string;
+  description: string;
+  previewKey: TemplateKey;
+}[] = [
   {
     title: "SaaS Landing Page",
-    description: "A modern, clean landing page perfect for any software-as-a-service product.",
+    description:
+      "A modern, clean landing page perfect for any software-as-a-service product.",
     previewKey: "saas",
   },
   {
     title: "E-commerce Storefront",
-    description: "A stylish and functional storefront designed to maximize conversions.",
+    description:
+      "A stylish and functional storefront designed to maximize conversions.",
     previewKey: "ecommerce",
   },
   {
     title: "Portfolio Website",
-    description: "A minimalist and elegant portfolio to showcase your creative work.",
+    description:
+      "A minimalist and elegant portfolio to showcase your creative work.",
     previewKey: "portfolio",
   },
 ];
 
 export const FeaturedTemplatesSection = () => {
   return (
-    <section className="w-full py-24 md:py-32 bg-background/50 border-t">
-      <div className="container mx-auto max-w-screen-xl px-4 md:px-6">
+    <section className='w-full py-24 md:py-32 bg-background/50 border-t'>
+      <div className='container mx-auto max-w-screen-xl px-4 md:px-6'>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.5 }}
-          className="flex flex-col items-center space-y-4 text-center mb-12"
+          className='flex flex-col items-center space-y-4 text-center mb-12'
         >
-          <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+          <h2 className='text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl'>
             Kickstart Your Next Project
           </h2>
-          <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-            Browse our library of professionally designed, production-ready templates.
+          <p className='max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed'>
+            Explore a wide range of expertly crafted templates. Each design is
+            ready to launch and built for performance.
           </p>
         </motion.div>
-        
+
         <motion.div
-          initial="hidden"
-          whileInView="visible"
+          initial='hidden'
+          whileInView='visible'
           viewport={{ once: true, amount: 0.2 }}
           transition={{ staggerChildren: 0.2 }}
-          className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-2 md:grid-cols-3 lg:gap-12"
+          className='mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-2 md:grid-cols-3 lg:gap-12'
         >
           {featuredTemplates.map((template) => (
             <TemplateCard
@@ -62,18 +70,18 @@ export const FeaturedTemplatesSection = () => {
         </motion.div>
 
         <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.8 }}
-            transition={{ duration: 0.5 }}
-            className="mt-12 text-center"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.8 }}
+          transition={{ duration: 0.5 }}
+          className='mt-12 text-center'
         >
-            <Button asChild size="lg" variant="secondary">
-            <Link href="/templates">
-                Explore All Templates
-                <ArrowRight className="ml-2 h-5 w-5" />
+          <Button asChild size='lg' variant='secondary'>
+            <Link href='/templates'>
+              Explore All Templates
+              <ArrowRight className='ml-2 h-5 w-5' />
             </Link>
-            </Button>
+          </Button>
         </motion.div>
       </div>
     </section>

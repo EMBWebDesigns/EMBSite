@@ -28,7 +28,7 @@ export const HeroClientSection = () => {
             transition={{ duration: 0.5 }}
           >
             <h1 className='text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400'>
-              AI-Powered Web Development
+              Build Smarter Websites with AI Precision
             </h1>
           </motion.div>
           <motion.p
@@ -37,8 +37,9 @@ export const HeroClientSection = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
             className='max-w-[700px] text-muted-foreground md:text-xl'
           >
-            Streamline your development with intelligent code generation, UI/UX
-            suggestions, and a component-based modular builder.
+            Accelerate your web development process with AI automation. Deliver
+            pixel-perfect designs, strategic content, and optimized pages with
+            instant AI generated code.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}

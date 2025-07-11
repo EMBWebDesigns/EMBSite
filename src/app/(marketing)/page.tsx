@@ -75,12 +75,13 @@ export default function Home() {
               className='flex flex-col items-center space-y-4 text-center mb-12'
             >
               <h2 className='text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl'>
-                Powerful Features to Build Faster
+                Everything You Need to Build Smarter Websites
               </h2>
               <p className='max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed'>
-                From code generation to layout suggestions, our AI has you
-                covered. We provide a suite of tools designed to accelerate your
-                workflow and enhance your creativity.
+                Our AI-powered platform simplifies web development by combining
+                intelligent design, automated content generation, SEO
+                optimization, and performance tools, so you can launch
+                high-quality websites with speed and confidence.
               </p>
             </div>
 

@@ -72,7 +72,9 @@ export const Footer = () => {
           <div className='mb-8 sm:mb-0'>
             <Logo />
             <p className='mt-4 text-sm text-muted-foreground max-w-xs'>
-              AI-Powered Web Development Platform to accelerate your workflow.
+              EMB Web Designs lets you build and launch professional,
+              AI-generated websites in minutes, complete with smart design, code
+              export, and SEO tools. Instant smart coding. No hassle.
             </p>
             {socialLinks.length > 0 && (
               <div className='flex space-x-4 mt-6'>
