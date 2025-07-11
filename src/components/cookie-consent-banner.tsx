@@ -42,11 +42,11 @@ export const CookieConsentBanner = () => {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ x: "-100%", opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          exit={{ x: "-100%", opacity: 0 }}
+          initial={{ y: "110%", opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: "110%", opacity: 0 }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="fixed bottom-4 left-4 z-50 w-full max-w-md"
+          className="fixed bottom-6 left-4 right-4 z-50 sm:max-w-md sm:right-auto"
         >
           <div className="bg-background border shadow-lg rounded-lg p-6 space-y-4">
             <div>
