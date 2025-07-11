@@ -26,30 +26,39 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // Start as true
   const router = useRouter();
 
   useEffect(() => {
+    // onAuthStateChange is the single source of truth.
+    // It fires once on initial load, and then on every auth event.
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
 
       if (session?.user) {
+        // If there's a user, fetch their profile
         const { data: profileData } = await supabase
           .from('profiles')
           .select('*')
           .eq('id', session.user.id)
           .single();
         setProfile(profileData);
+        
+        // Redirect on sign-in
         if (event === 'SIGNED_IN') {
           router.push('/dashboard');
         }
       } else {
+        // If there's no user, clear the profile
         setProfile(null);
       }
+      
+      // Once we have the auth state, we are no longer loading.
       setLoading(false);
     });
 
+    // Cleanup the subscription on unmount
     return () => {
       subscription.unsubscribe();
     };
