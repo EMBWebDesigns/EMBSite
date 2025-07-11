@@ -30,13 +30,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    setLoading(true);
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+    // This function handles the initial session check when the app loads.
+    const getInitialSession = async () => {
       try {
+        const { data: { session } } = await supabase.auth.getSession();
         setSession(session);
         setUser(session?.user ?? null);
-
         if (session?.user) {
           const { data: profileData } = await supabase
             .from('profiles')
@@ -44,16 +43,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             .eq('id', session.user.id)
             .single();
           setProfile(profileData);
-          if (event === 'SIGNED_IN') {
-            router.push('/dashboard');
-          }
-        } else {
-          setProfile(null);
         }
       } catch (error) {
-        console.error("Error in onAuthStateChange handler:", error);
+        console.error("Error fetching initial session:", error);
       } finally {
         setLoading(false);
+      }
+    };
+
+    getInitialSession();
+
+    // This listener handles subsequent auth state changes (e.g., login, logout).
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+
+      if (session?.user) {
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single();
+        setProfile(profileData);
+        if (event === 'SIGNED_IN') {
+          router.push('/dashboard');
+        }
+      } else {
+        setProfile(null);
       }
     });
 
